@@ -1,0 +1,9 @@
+export(age.deaths, compare.infections, infection.estimator, infection.range.estimator, infections.by.state, state.deaths)
+
+importFrom(grDevices, col2rgb, colorRampPalette, grey, palette, rgb)
+importFrom(graphics, abline, axis, box, legend, lines, mtext, par, points, polygon, title)
+importFrom(maps, map)
+importFrom(phytools, make.transparent)
+importFrom(randomcoloR, distinctColorPalette)
+importFrom(stats, dpois, fitted, lm, loess, nls, optimize, ppois, predict, setNames)
+importFrom(utils, read.csv)

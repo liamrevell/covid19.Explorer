@@ -1,0 +1,15 @@
+Package: covid19.Explorer
+Version: 0.1
+Date: 2020-12-20
+Title: COVID-19 Explorer
+Author: Liam J. Revell [aut, cre]
+Maintainer: Liam J. Revell <liam.revell@umb.edu>
+Depends: R (>= 4.0.0)
+Imports: maps, phytools, randomcoloR
+ZipData: no
+Description: Package is for estimating and visualizing COVID-19 infections and deaths.
+License: GPL (>= 2)
+URL: http://github.com/liamrevell/covid19.Explorer
+Packaged: 
+Repository: 
+Date/Publication:
