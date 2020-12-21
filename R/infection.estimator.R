@@ -628,7 +628,8 @@ compare.infections<-function(states=
 		"Sep","Oct","Nov","Dec","Jan (2021)")
 	denom<-if(per.capita) " / 1M" else ""
 	if(length(states)>0){
-		cols<-distinctColorPalette(length(states))
+		set.seed(999)
+		cols<-c("black",distinctColorPalette(length(states)-1))
 		## plot deaths
 		dd<-list()
 		for(i in 1:length(states)){
