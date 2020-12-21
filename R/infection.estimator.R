@@ -717,9 +717,9 @@ compare.infections<-function(states=
 		legend(x="topleft",states,lty="dashed",col=cols,
 			bty="n",cex=0.9,xpd=TRUE,xjust=0.5,yjust=1)
 		if(cumulative) 
-			mtext(paste("a) estimated cumulative infections",denom,sep=""),adj=0,line=1,cex=1.2)
+			mtext(paste("b) estimated cumulative infections",denom,sep=""),adj=0,line=1,cex=1.2)
 		else
-			mtext(paste("a) estimated daily infections",denom,sep=""),adj=0,line=1,cex=1.2)
+			mtext(paste("b) estimated daily infections",denom,sep=""),adj=0,line=1,cex=1.2)
 	}
 }
 
