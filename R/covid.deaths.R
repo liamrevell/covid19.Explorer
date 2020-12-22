@@ -45,8 +45,40 @@ covid.deaths<-function(
 
 	xx<-seq(from=32,by=7,length.out=length(td))
 
-	par(mar=c(5.1,5.1,2.1,3.1),bg=bg)
-	plot(NA,xlim=xlim,ylim=c(0,1.1*max(td+cd)),bty="n",axes=FALSE,
+	par(mar=c(5.1,5.1,2.1,3.1),bg=bg,mfrow=c(2,1))
+	
+	plot(NA,xlim=xlim,ylim=c(0,1.2*max(cd)),bty="n",axes=FALSE,
+		xlab="",ylab="")
+	polygon(x=c(xx,max(xx),min(xx)),y=c(cd,0,0),border=FALSE,
+		col=palette()[2])
+
+	Args<-list(...)
+	Args$side<-2
+	Args$labels<-FALSE
+	h<-do.call(axis,Args)
+	Args$at<-h
+	Args$labels<-if(max(cd)>1000000) paste(h/1000000,"M",sep="") else
+		if(max(cd)>1000) paste(h/1000,"k",sep="") else h
+	do.call(axis,Args)
+	abline(h=h,col=grey(0.75),lwd=1,lty="dotted")
+	Args$side<-1
+	Args$at<-ms
+	Args$labels<-mm
+	v<-do.call(axis,Args)
+	title(ylab=if(cumulative) "cumulative deaths" else "weekly deaths")
+	
+	if(cumulative)
+		mtext("a) cumulative COVID-19 deaths",adj=0,line=1,cex=1.2)
+	else
+		mtext("a) weekly COVID-19 deaths",adj=0,line=1,cex=1.2)
+
+	legend(x="topleft","confirmed COVID-19 deaths",
+		pch=15,cex=0.9,
+		col=palette()[2],
+		pt.cex=1.5,bty="n",xpd=TRUE,
+		xjust=0.5,yjust=1)
+	
+	plot(NA,xlim=xlim,ylim=c(0,1.2*max(td+cd)),bty="n",axes=FALSE,
 		xlab="",ylab="")
 	polygon(x=c(xx,max(xx),min(xx)),y=c(td,0,0),border=FALSE,
 		col=palette()[4])
@@ -72,5 +104,12 @@ covid.deaths<-function(
 		col=palette()[c(4,2)],
 		pt.cex=1.5,bty="n",xpd=TRUE,
 		xjust=0.5,yjust=1)
+		
+	title(ylab=if(cumulative) "cumulative deaths" else "weekly deaths")
+	
+	if(cumulative)
+		mtext("b) cumulative COVID-19 and non-COVID deaths",adj=0,line=1,cex=1.2)
+	else
+		mtext("b) weekly COVID-19 and non-COVID deaths",adj=0,line=1,cex=1.2)
 
 }
