@@ -21,6 +21,8 @@
 		data=list(),
 		xlim=c(31,366-15),
 		bg="transparent",
+		plot=c("standard","smooth","bar"),
+		show=c("raw","per.capita","percent"),
 		...)
 }
 \arguments{
@@ -31,6 +33,8 @@
 	\item{data}{list containing CDC data. If not supplied, function will create this object.}
 	\item{xlim}{\emph{x} limits for the plot.}
 	\item{bg}{background color of the plot.}
+	\item{plot}{plotting options.}
+	\item{show}{what to plot.}
 	\item{...}{optional arguments.}
 }
 \description{
