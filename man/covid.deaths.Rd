@@ -23,6 +23,7 @@
 		bg="transparent",
 		plot=c("standard","smooth","bar"),
 		show=c("raw","per.capita","percent"),
+		split.groups=TRUE,
 		...)
 }
 \arguments{
@@ -35,6 +36,7 @@
 	\item{bg}{background color of the plot.}
 	\item{plot}{plotting options.}
 	\item{show}{what to plot.}
+	\item{split.groups}{split groups (logical).}
 	\item{...}{optional arguments.}
 }
 \description{

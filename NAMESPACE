@@ -5,5 +5,6 @@ importFrom(graphics, abline, axis, box, legend, lines, mtext, par, points, polyg
 importFrom(maps, map)
 importFrom(phytools, make.transparent)
 importFrom(randomcoloR, distinctColorPalette)
+importFrom(RColorBrewer, brewer.pal)
 importFrom(stats, dpois, fitted, lm, loess, nls, optimize, ppois, predict, setNames)
 importFrom(utils, read.csv)
