@@ -113,7 +113,7 @@ covid.deaths<-function(
 			
 		qq<-if(show=="per.capita") "/ 1M" else if(show=="percent") "%" else ""
 		
-		ylim<-if(split.groups&&show%in%c("per.capita","percent"))
+		ylim<-if(split.groups&&plot=="smooth")
 			c(0,max(sapply(CD,max))) else c(0,1.2*max(cd))
 		plot(NA,xlim=xlim,ylim=ylim,bty="n",axes=FALSE,
 			xlab="",ylab="")
