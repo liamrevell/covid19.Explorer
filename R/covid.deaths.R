@@ -117,7 +117,7 @@ covid.deaths<-function(
 			c(0,max(sapply(CD,max))) else c(0,1.2*max(cd))
 		plot(NA,xlim=xlim,ylim=ylim,bty="n",axes=FALSE,
 			xlab="",ylab="")
-		cols<-colorRampPalette(colors=brewer.pal("OrRd",n=8))(22)
+		cols<-colorRampPalette(colors=brewer.pal("YlOrRd",n=8))(22)
 		Cols<-matrix(cols,11,2,byrow=TRUE,
 			dimnames=list(c("Under 1 year","1-4 years","5-14 years",
 			"15-24 years","25-34 years","35-44 years","45-54 years",
