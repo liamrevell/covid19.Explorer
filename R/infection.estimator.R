@@ -483,7 +483,7 @@ infections.by.state<-function(states=NULL,
 				cumCases[i,]<-if(rs[i]==0) cumCases[i,] else cumCases[i,]/rs[i]*100
 		}
 		par(mar=c(5.1,5.1,2.1,3.1),bg=bg)
-		yex<-if(show.as.percent) 1.2 else if(cumulative) 1.05 else 1.3
+		yex<-if(show.as.percent) 1.2 else 1.05
 		plot(NA,xlim=xlim,ylim=c(0,yex*max(cumCases,na.rm=TRUE)),
 			bty="n",xlab="",
 			ylab="",axes=FALSE)
