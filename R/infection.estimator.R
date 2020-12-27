@@ -206,7 +206,7 @@ infection.estimator<-function(state="Massachusetts",
 			obsCases<-obsCases/population*100
 		}
 		if(plot){
-			plot(NA,xlim=xlim,ylim=c(0,1.05*max(estCases)),bty="n",
+			plot(NA,xlim=xlim,ylim=c(0,1.25*max(estCases)),bty="n",
 				xlab="",
 				ylab="",axes=FALSE)
 			title(ylab=if(percent) "infections (observed or estimated) %" else
@@ -267,7 +267,7 @@ infection.estimator<-function(state="Massachusetts",
 			obsCases<-obsCases/population*100
 		}
 		if(plot){
-			plot(NA,xlim=xlim,ylim=c(0,1.05*max(estCases)),bty="n",
+			plot(NA,xlim=xlim,ylim=c(0,1.25*max(estCases)),bty="n",
 				ylab="",
 				xlab="",axes=FALSE)
 			title(ylab=if(percent) "infections (observed or estimated) %" else
