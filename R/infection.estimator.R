@@ -400,7 +400,6 @@ infections.by.state<-function(states=NULL,
 	tots<-if(cumulative) apply(Cases,2,max) else colSums(Cases)
 	ii<-order(tots)
 	Cases<-Cases[,ii]
-	print(tots[ii])
 	Centers<-Centers[-which(Centers$name=="Alaska"),]
 	Centers<-Centers[-which(Centers$name=="Hawaii"),]
 	Centers<-Centers[-which(Centers$name=="Puerto Rico"),]
@@ -421,7 +420,6 @@ infections.by.state<-function(states=NULL,
 	}
 	colors<-c(colors,setNames(rep("black",2),c("Alaska","Hawaii")))
 	if(stacked){
-		#cumCases<-t(apply(Cases[,ii],1,cumsum))
 		cumCases<-t(apply(Cases,1,cumsum))
 		if(show.as.percent){
 			rs<-rowSums(Cases)
