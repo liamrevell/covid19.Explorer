@@ -127,79 +127,79 @@ infection.estimator<-function(state="Massachusetts",
 			cex=0.9,pt.cex=c(NA,1.5),lwd=c(2,NA),
 			box.col="transparent")
 	}
-	if(cumulative==FALSE){
-		newDeaths<-moving.average(newDeaths,window)
-		obsCases<-moving.average(c(rep(0,21),Cases$new_case),window)
-		if(smooth){
-			estCases<-moving.average(c(rep(0,21),Cases$new_death),
-				window)
-			estCases<-estCases[(delay+1):length(estCases)]
-			estCases<-estCases/ifr[1:length(estCases)]
-			T<-length(estCases)
-			tt<-1:T
-			cr<-obsCases[1:length(estCases)]/estCases
-			cr[is.nan(cr)]<-0
-			cr[cr==Inf]<-0
-			cr[cr==-Inf]<-0
-			if(window<7) cr<-moving.average(cr,7)
-			cr[cr>1]<-1
-			cr[cr<0]<-0
-			fm<-try(nls(cr~a/(1+exp(-b*(tt-c))),
+	newDeaths<-moving.average(newDeaths,window)
+	obsCases<-moving.average(c(rep(0,21),Cases$new_case),window)
+	if(smooth){
+		estCases<-moving.average(c(rep(0,21),Cases$new_death),
+			window)
+		estCases<-estCases[(delay+1):length(estCases)]
+		estCases<-estCases/ifr[1:length(estCases)]
+		T<-length(estCases)
+		tt<-1:T
+		cr<-obsCases[1:length(estCases)]/estCases
+		cr[is.nan(cr)]<-0
+		cr[cr==Inf]<-0
+		cr[cr==-Inf]<-0
+		if(window<7) cr<-moving.average(cr,7)
+		cr[cr>1]<-1
+		cr[cr<0]<-0
+		fm<-try(nls(cr~a/(1+exp(-b*(tt-c))),
+			start=list(a=0.3,b=0.05,c=100),
+			control=list(maxiter=1000)))
+		ntries<-0
+		while(attr(fm,"class")=="try-error"&&ntries<10){
+			ii<-sort(sample(1:T,100))
+			fm<-try(nls(cr[ii]~a/(1+exp(-b*(tt[ii]-c))),
 				start=list(a=0.3,b=0.05,c=100),
 				control=list(maxiter=1000)))
-			ntries<-0
-			while(attr(fm,"class")=="try-error"&&ntries<10){
-				ii<-sort(sample(1:T,100))
-				fm<-try(nls(cr[ii]~a/(1+exp(-b*(tt[ii]-c))),
-					start=list(a=0.3,b=0.05,c=100),
-					control=list(maxiter=1000)))
-				ntries<-ntries+1
-			}
-			if(attr(fm,"class")=="try-error"){
+			ntries<-ntries+1
+		}
+		if(attr(fm,"class")=="try-error"){
+			tt<-(T-99):T
+			cr<-rep(mean(cr[(T-99):T]),100)
+			fm<-lm(cr~tt)
+		}
+		if(show.cr){
+			plot(tt,cr,xlim=xlim,bty="n",pch=21,bg="grey",
+				ylab="",xlab="",axes=FALSE)
+			lines(tt,predict(fm),lwd=2,col=cols[2])
+			Args<-list(...)
+			Args$side<-2
+			h<-do.call(axis,Args)
+			Args$side<-1
+			Args$at<-ms
+			Args$labels<-mm
+			v<-do.call(axis,Args)
+			title(ylab="ratio",line=4)
+			plot<-FALSE
+			mtext(paste("b)",state,"daily estimated infections/confirmed cases"),
+				adj=0,line=1,cex=1.2)
+		}
+		if(delay>0){
+			tt<-1:(length(obsCases)-length(estCases))+length(estCases)
+			CR<-predict(fm,newdata=data.frame(tt=tt))
+			if(length(obsCases[tt])!=length(CR)){
 				tt<-(T-99):T
 				cr<-rep(mean(cr[(T-99):T]),100)
 				fm<-lm(cr~tt)
-			}
-			if(show.cr){
-				plot(tt,cr,xlim=xlim,bty="n",pch=21,bg="grey",
-					ylab="",xlab="",axes=FALSE)
-				lines(tt,predict(fm),lwd=2,col=cols[2])
-				Args<-list(...)
-				Args$side<-2
-				h<-do.call(axis,Args)
-				Args$side<-1
-				Args$at<-ms
-				Args$labels<-mm
-				v<-do.call(axis,Args)
-				title(ylab="ratio",line=4)
-				plot<-FALSE
-				mtext(paste("b)",state,"daily estimated infections/confirmed cases"),
-					adj=0,line=1,cex=1.2)
-			}
-			if(delay>0){
 				tt<-1:(length(obsCases)-length(estCases))+length(estCases)
 				CR<-predict(fm,newdata=data.frame(tt=tt))
-				if(length(obsCases[tt])!=length(CR)){
-					tt<-(T-99):T
-					cr<-rep(mean(cr[(T-99):T]),100)
-					fm<-lm(cr~tt)
-					tt<-1:(length(obsCases)-length(estCases))+length(estCases)
-					CR<-predict(fm,newdata=data.frame(tt=tt))
-				}
-				if(show.cr) lines(tt,CR,lwd=2,col=cols[2],lty="dotted")
-				estCases<-c(estCases,obsCases[tt]/CR)
 			}
-			tt<-1:length(estCases)
-			fit<-loess(estCases~tt,span=span[1])
-			estCases<-predict(fit)
-			estCases[estCases<0]<-0
-			if(delay<=21) estCases[1:(21-delay)]<-0	
-		} else {
-			estCases<-moving.average(c(rep(0,21),Cases$new_death),window)
-			estCases<-estCases[(delay+1):length(estCases)]
-			estCases<-estCases/ifr[1:length(estCases)]
-			T<-length(estCases)
+			if(show.cr) lines(tt,CR,lwd=2,col=cols[2],lty="dotted")
+			estCases<-c(estCases,obsCases[tt]/CR)
 		}
+		tt<-1:length(estCases)
+		fit<-loess(estCases~tt,span=span[1])
+		estCases<-predict(fit)
+		estCases[estCases<0]<-0
+		if(delay<=21) estCases[1:(21-delay)]<-0	
+	} else {
+		estCases<-moving.average(c(rep(0,21),Cases$new_death),window)
+		estCases<-estCases[(delay+1):length(estCases)]
+		estCases<-estCases/ifr[1:length(estCases)]
+		T<-length(estCases)
+	}
+	if(!cumulative){
 		if(percent){
 			estCases<-estCases/population*100
 			newDeaths<-newDeaths/population*100
@@ -258,66 +258,9 @@ infection.estimator<-function(state="Massachusetts",
 				xjust=0.5,yjust=1)
 		}
 	} else {
-		newDeaths<-c(rep(0,21),Cases$tot_death)
-		obsCases<-c(rep(0,21),Cases$tot_cases)
-		if(smooth){
-			ObsCases<-moving.average(c(rep(0,21),Cases$new_case),
-				window)
-			estCases<-moving.average(c(rep(0,21),Cases$new_death),
-				window)
-			estCases<-estCases[(delay+1):length(estCases)]
-			estCases<-estCases/ifr[1:length(estCases)]
-			T<-length(estCases)
-			if(delay>0){
-				cr<-ObsCases[1:length(estCases)]/estCases
-				tt<-1:length(cr)
-				cr[is.nan(cr)]<-0
-				cr[cr==Inf]<-0
-				cr[cr==-Inf]<-0
-				if(window<7) cr<-moving.average(cr,7)
-				cr[cr>10*mean(cr[100:length(cr)])]<-mean(cr)
-				cr[cr<0]<-0
-				object<-data.frame(tt,cr)
-				fm<-try(nls(cr~a/(1+exp(-b*(tt-c))),
-					start=list(a=0.3,b=0.05,c=100),
-					control=list(maxiter=100),data=object))
-				ntries<-0
-				while(attr(fm,"class")=="try-error"&&ntries<10){
-					ii<-sort(sample(1:T,100))
-					fm<-try(nls(cr[ii]~a/(1+exp(-b*(tt[ii]-c))),
-						start=list(a=0.3,b=0.05,c=100),
-						control=list(maxiter=1000)))
-					ntries<-ntries+1
-				}
-				if(attr(fm,"class")=="try-error"){
-					tt<-(T-99):T
-					cr<-rep(mean(cr[(T-99):T]),100)
-					fm<-lm(cr~tt)
-				}
-				tt<-1:(length(ObsCases)-length(estCases))+length(estCases)
-				CR<-predict(fm,newdata=data.frame(tt=tt))
-				if(length(ObsCases[tt])!=length(CR)){
-					tt<-(T-99):T
-					cr<-rep(mean(cr[(T-99):T]),100)
-					fm<-lm(cr~tt)
-					tt<-1:(length(ObsCases)-length(estCases))+length(estCases)
-					CR<-predict(fm,newdata=data.frame(tt=tt))
-				}
-			}
-			estCases<-c(rep(0,21),Cases$tot_death)
-			estCases<-estCases[(delay+1):length(estCases)]
-			estCases<-estCases/ifr[1:length(estCases)]
-			if(delay>0) estCases<-c(estCases,estCases[length(estCases)]+cumsum(ObsCases[tt]/CR))
-			tt<-1:length(estCases)
-			estCases<-fitted(loess(estCases~tt,span=span[1]))
-			estCases[estCases<0]<-0
-			if(delay<=21) estCases[1:(21-delay)]<-0
-		} else {
-			estCases<-c(rep(0,21),Cases$tot_death)
-			estCases<-estCases[(delay+1):length(estCases)]
-			estCases<-estCases/ifr[1:length(estCases)]
-			T<-length(estCases)
-		}
+		estCases<-cumsum(estCases)
+		newDeaths<-cumsum(newDeaths)
+		obsCases<-cumsum(obsCases)
 		if(percent){
 			newDeaths<-newDeaths/population*100
 			estCases<-estCases/population*100
@@ -454,8 +397,10 @@ infections.by.state<-function(states=NULL,
 		} else Cases[1:length(tmp[[ss]]),i]<-tmp[[ss]]
 	}
 	Cases[is.na(Cases)]<-0
-	tots<-colSums(Cases)
+	tots<-if(cumulative) apply(Cases,2,max) else colSums(Cases)
 	ii<-order(tots)
+	Cases<-Cases[,ii]
+	print(tots[ii])
 	Centers<-Centers[-which(Centers$name=="Alaska"),]
 	Centers<-Centers[-which(Centers$name=="Hawaii"),]
 	Centers<-Centers[-which(Centers$name=="Puerto Rico"),]
@@ -476,7 +421,8 @@ infections.by.state<-function(states=NULL,
 	}
 	colors<-c(colors,setNames(rep("black",2),c("Alaska","Hawaii")))
 	if(stacked){
-		cumCases<-t(apply(Cases[,ii],1,cumsum))
+		#cumCases<-t(apply(Cases[,ii],1,cumsum))
+		cumCases<-t(apply(Cases,1,cumsum))
 		if(show.as.percent){
 			rs<-rowSums(Cases)
 			for(i in 1:nrow(cumCases)) 
