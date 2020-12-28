@@ -10,7 +10,7 @@ infection.range.estimator<-function(state="Massachusetts",
 	percent=FALSE,
 	plot=TRUE,
 	bg="transparent",
-	xlim=c(45,366-15),
+	xlim=c(45,366),
 	...){
 	if(length(ifr.low)>1&&length(ifr.low)==length(ifr.high)){
 		IFR<-rbind(ifr.low,ifr.high)
