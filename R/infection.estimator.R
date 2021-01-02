@@ -19,9 +19,13 @@ infection.estimator<-function(state="Massachusetts",
 	percent=FALSE,
 	plot=TRUE,
 	bg="transparent",
-	xlim=c(45,366),
+	xlim=c(45,366+15),
 	show.points=FALSE,
 	...){
+	ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,31))
+	mm<-c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug",
+		"Sep","Oct","Nov","Dec","Jan","Feb (2021)")
+	ttime<-max(ms)
 	if(plot=="infection.ratio"){ 
 		show.cr<-TRUE
 		plot<-TRUE
@@ -29,22 +33,7 @@ infection.estimator<-function(state="Massachusetts",
 	if(smooth) if(length(span)==1) span<-c(span,0.3)
 	cols<-make.transparent(c("darkgreen",palette()[c(4,2)]),
 		0.8)
-	if(length(ifr)==1) ifr<-rep(ifr,366)
-	else if(length(ifr)>1&&length(ifr)<366){
-		tmp<-vector()
-		dd<-round(seq(0,366,length.out=length(ifr)))
-		for(i in 1:(length(ifr)-1)){
-			tmp<-c(tmp,seq(ifr[i],ifr[i+1],length.out=dd[i+1]-dd[i]))
-		}
-		if(smooth){
-			tt<-1:366
-			tmp<-predict(loess(tmp~tt,span=span[2]))
-		}
-		ifr<-tmp
-	} else ifr<-ifr[1:366]
-	ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31))
-	mm<-c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug",
-		"Sep","Oct","Nov","Dec","Jan (2021)")
+	ifr<-make.ifr(ifr,ttime,smooth=smooth,span=span)
 	if(plot){
 		par(mfrow=c(2,1),mar=c(5.1,5.1,3.1,3.1),bg=bg)
 		plot(NA,xlim=xlim,ylim=100*c(0,0.02),bty="n",
@@ -81,8 +70,14 @@ infection.estimator<-function(state="Massachusetts",
 		"Rhode Island","South Carolina","South Dakota","Tennessee",
 		"Texas","Utah","Vermont","Virginia",
 		"Washington","West Virginia","Wisconsin","Wyoming"))
-	if(!is.null(data$Cases)) Cases<-data$Cases
-	else Cases<-read.csv("https://liamrevell.github.io/data/United_States_COVID-19_Cases_and_Deaths_by_State_over_Time.csv")
+	if(!is.null(data$Cases)) { 
+		Cases<-data$Cases
+		dd<-as.Date(Cases$submission_date,format="%m/%d/%Y")
+	} else { 
+		Cases<-read.csv("https://liamrevell.github.io/data/United_States_COVID-19_Cases_and_Deaths_by_State_over_Time.csv")
+		dd<-as.Date(Cases$submission_date,format="%m/%d/%Y")
+		Cases<-Cases[order(dd),]
+	}
 	Cases<-fixCases(Cases)
 	if(state!="United States") Cases<-Cases[Cases$state==state.codes[state],]
 	else {
@@ -320,7 +315,9 @@ infection.estimator<-function(state="Massachusetts",
 				xjust=0.5,yjust=1)
 		}
 	}
-	invisible(estCases)
+	invisible(setNames(estCases,
+		seq(from=as.Date("1/1/2020",format="%m/%d/%Y"),by=1,
+		length.out=length(estCases))))
 }
 
 infections.by.state<-function(states=NULL,
@@ -334,26 +331,15 @@ infections.by.state<-function(states=NULL,
 	span=c(0.2,0.3),
 	show.ifr=TRUE,
 	bg="transparent",
-	xlim=c(45,366),
+	xlim=c(45,366+15),
 	show.as.percent=FALSE,
 	...){
 	if(length(span)==1) span<-c(span,0.3)
-	if(length(ifr)==1) ifr<-rep(ifr,366)
-	else if(length(ifr)>1){
-		tmp<-vector()
-		dd<-round(seq(0,366,length.out=length(ifr)))
-		for(i in 1:(length(ifr)-1)){
-			tmp<-c(tmp,seq(ifr[i],ifr[i+1],length.out=dd[i+1]-dd[i]))
-		}
-		if(smooth){
-			tt<-1:366
-			tmp<-predict(loess(tmp~tt,span=span[2]))
-		}
-		ifr<-tmp
-	}
-	ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31))
+	ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,31))
 	mm<-c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug",
-		"Sep","Oct","Nov","Dec","Jan (2021)")
+		"Sep","Oct","Nov","Dec","Jan","Feb (2021)")
+	ttime<-max(ms)
+	ifr<-make.ifr(ifr,ttime,smooth=smooth,span=span)
 	if(is.null(states)) 
 		states<-c("Alabama","Alaska","Arizona",
 			"Arkansas","California","Colorado","Connecticut",
@@ -563,13 +549,14 @@ compare.infections<-function(states=
 	span=c(0.2,0.3),
 	plot=TRUE,
 	bg="transparent",
-	xlim=c(45,366),
+	xlim=c(45,366+15),
 	per.capita=TRUE,
 	...){
 	states<-states[!is.null(states)]
-	ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31))
+	ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,31))
 	mm<-c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug",
-		"Sep","Oct","Nov","Dec","Jan (2021)")
+		"Sep","Oct","Nov","Dec","Jan","Feb (2021)")
+	ttime<-max(ms)
 	denom<-if(per.capita) " / 1M" else ""
 	if(length(states)>0){
 		set.seed(999)

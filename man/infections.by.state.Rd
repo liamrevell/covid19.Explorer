@@ -13,7 +13,7 @@
 		span=c(0.2,0.3),
 		show.ifr=TRUE,
 		bg="transparent",
-		xlim=c(45,366),
+		xlim=c(45,366+15),
 		show.as.percent=FALSE,
 		...)
 }

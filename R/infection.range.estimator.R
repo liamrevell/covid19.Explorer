@@ -1,3 +1,19 @@
+make.ifr<-function(ifr,t,span=0.3,smooth=TRUE){
+	if(length(ifr)==1) ifr<-rep(ifr,t)
+	else if(length(ifr)>1&&length(ifr)<t){
+		tmp<-vector()
+		dd<-round(seq(0,t,length.out=length(ifr)))
+		for(i in 1:(length(ifr)-1)){
+			tmp<-c(tmp,seq(ifr[i],ifr[i+1],length.out=dd[i+1]-dd[i]))
+		}
+		if(smooth){
+			tt<-1:t
+			tmp<-predict(loess(tmp~tt,span=span[2]))
+		}
+		ifr<-tmp
+	} else ifr<-ifr[1:t]
+}
+
 infection.range.estimator<-function(state="Massachusetts",
 	cumulative=FALSE,
 	data=list(),
@@ -10,8 +26,12 @@ infection.range.estimator<-function(state="Massachusetts",
 	percent=FALSE,
 	plot=TRUE,
 	bg="transparent",
-	xlim=c(45,366),
+	xlim=c(45,366+15),
 	...){
+	ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,31))
+	mm<-c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug",
+		"Sep","Oct","Nov","Dec","Jan","Feb (2021)")
+	ttime<-max(ms)
 	if(length(ifr.low)>1&&length(ifr.low)==length(ifr.high)){
 		IFR<-rbind(ifr.low,ifr.high)
 		ifr.low<-apply(IFR,2,min)
@@ -19,35 +39,8 @@ infection.range.estimator<-function(state="Massachusetts",
 	}
 	if(smooth) if(length(span)==1) span<-c(span,0.3)
 	cols<-c("darkgreen",palette()[c(4,2)])
-	if(length(ifr.low)==1) ifr.low<-rep(ifr.low,366)
-	else if(length(ifr.low)>1&&length(ifr.low)<366){
-		tmp<-vector()
-		dd<-round(seq(0,366,length.out=length(ifr.low)))
-		for(i in 1:(length(ifr.low)-1)){
-			tmp<-c(tmp,seq(ifr.low[i],ifr.low[i+1],length.out=dd[i+1]-dd[i]))
-		}
-		if(smooth){
-			tt<-1:366
-			tmp<-predict(loess(tmp~tt,span=span[2]))
-		}
-		ifr.low<-tmp
-	} else ifr.low<-ifr.low[1:366]
-	if(length(ifr.high)==1) ifr.high<-rep(ifr.high,366)
-	else if(length(ifr.high)>1&&length(ifr.high)<366){
-		tmp<-vector()
-		dd<-round(seq(0,366,length.out=length(ifr.high)))
-		for(i in 1:(length(ifr.high)-1)){
-			tmp<-c(tmp,seq(ifr.high[i],ifr.high[i+1],length.out=dd[i+1]-dd[i]))
-		}
-		if(smooth){
-			tt<-1:366
-			tmp<-predict(loess(tmp~tt,span=span[2]))
-		}
-		ifr.high<-tmp
-	} else ifr.high<-ifr.high[1:366]
-	ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31))
-	mm<-c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug",
-		"Sep","Oct","Nov","Dec","Jan (2021)")
+	ifr.low<-make.ifr(ifr.low,ttime,span=span,smooth=smooth)
+	ifr.high<-make.ifr(ifr.high,ttime,span=span,smooth=smooth)
 	if(plot){
 		par(mfrow=c(2,1),mar=c(5.1,5.1,3.1,3.1),bg=bg)
 		plot(NA,xlim=xlim,ylim=100*c(0,0.02),bty="n",
@@ -90,8 +83,14 @@ infection.range.estimator<-function(state="Massachusetts",
 		"Rhode Island","South Carolina","South Dakota","Tennessee",
 		"Texas","Utah","Vermont","Virginia",
 		"Washington","West Virginia","Wisconsin","Wyoming"))
-	if(!is.null(data$Cases)) Cases<-data$Cases
-	else Cases<-read.csv("https://liamrevell.github.io/data/United_States_COVID-19_Cases_and_Deaths_by_State_over_Time.csv")
+	if(!is.null(data$Cases)) { 
+		Cases<-data$Cases
+		dd<-as.Date(Cases$submission_date,format="%m/%d/%Y")
+	} else { 
+		Cases<-read.csv("https://liamrevell.github.io/data/United_States_COVID-19_Cases_and_Deaths_by_State_over_Time.csv")
+		dd<-as.Date(Cases$submission_date,format="%m/%d/%Y")
+		Cases<-Cases[order(dd),]
+	}
 	Cases<-fixCases(Cases)
 	if(!(state%in%c("New York","United States"))) Cases<-Cases[Cases$state==state.codes[state],]
 	else if(state=="United States"){
