@@ -131,9 +131,9 @@ covid.deaths<-function(
 		ylim<-if(split.groups&&plot=="smooth")
 			c(0,max(sapply(CD,max))) else c(0,1.2*max(cd))
 
-		ylim<-if(split.groups&&plot!="smooth"&&show=="percent.of.covid.deaths")
-			c(0,120)
-		
+		if(split.groups&&plot!="smooth"&&show=="percent.of.covid.deaths")
+			ylim<-c(0,120)
+
 		plot(NA,xlim=xlim,ylim=ylim,bty="n",axes=FALSE,
 			xlab="",ylab="")
 		cols<-colorRampPalette(colors=brewer.pal("YlOrRd",n=8))(52)
@@ -194,6 +194,8 @@ covid.deaths<-function(
 		Args<-list(...)
 		Args$side<-2
 		Args$labels<-FALSE
+		if(show=="percent.of.covid.deaths"&&plot%in%c("bar","standard")&&split.groups) 
+			Args$at<-seq(0,100,by=20)
 		h<-do.call(axis,Args)
 		Args$at<-h
 		Args$labels<-if(max(cd)>1000000) paste(h/1000000,"M",sep="") else
@@ -259,7 +261,8 @@ covid.deaths<-function(
 		Args<-list(...)
 		Args$side<-2
 		Args$labels<-FALSE
-		if(show=="percent") Args$at<-seq(0,100,by=20)
+		if(show=="percent"||show=="percent.of.covid.deaths") 
+			Args$at<-seq(0,100,by=20)
 		h<-do.call(axis,Args)
 		Args$at<-h
 		Args$labels<-if(max(td+cd)>1000000) paste(h/1000000,"M",sep="") else
