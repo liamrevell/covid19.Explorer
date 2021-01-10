@@ -17,10 +17,10 @@ covid.deaths<-function(
 	all.causes=TRUE,
 	cumulative=FALSE,
 	data=list(),
-	xlim=c(31,366),
+	xlim=c(0,397),
 	bg="transparent",
 	plot=c("standard","smooth","bar"),
-	show=c("raw","per.capita","percent"),
+	show=c("raw","per.capita","percent","percent.of.covid.deaths"),
 	split.groups=TRUE,
 	...){
 	plot<-plot[1]
@@ -91,7 +91,19 @@ covid.deaths<-function(
 			td<-td/Tot*100
 			for(i in 1:length(age.group)){
 				for(j in 1:length(sex)){
-					CD[[i]][,j]<-CD[[i]][,j]/TD[[i]][,j]*100
+					CD[[i]][,j]<-CD[[i]][,j]/Tot*100
+				}
+			}
+		} else if(show=="percent.of.covid.deaths"){
+			Tot<-td+cd
+			Tot.cd<-cd
+			denom<-cd
+			denom[cd==0]<-1
+			cd<-cd/Tot*100
+			td<-td/Tot*100
+			for(i in 1:length(age.group)){
+				for(j in 1:length(sex)){
+					CD[[i]][,j]<-CD[[i]][,j]/Tot.cd*100
 				}
 			}
 		}
@@ -100,21 +112,28 @@ covid.deaths<-function(
 			if(show%in%c("per.capita","percent")&&plot%in%c("bar","standard")) 
 				plot<-"smooth"
 
-		ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31))
+		ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,31))
 		mm<-c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug",
-			"Sep","Oct","Nov","Dec","Jan (2021)")
+			"Sep","Oct","Nov","Dec","Jan", "Feb (2021)")
 
-		xx<-seq(from=32,by=7,length.out=length(td))
+		xx<-seq(from=0.5,by=7,length.out=length(td))
 
 		par(mfrow=c(2,1),mar=c(5.1,5.1,3.1,3.1),bg=bg)
 		
 		pp<-if(show=="per.capita") "/ 1M population" else 
-			if(show=="percent") "as % of all deaths" else ""
+			if(show=="percent") "as % of all deaths" else 
+			if(show=="percent.of.covid.deaths") "as % of COVID deaths" else
+			""
 			
-		qq<-if(show=="per.capita") "/ 1M" else if(show=="percent") "%" else ""
+		qq<-if(show=="per.capita") "/ 1M" else 
+			if(show=="percent"||show=="percent.of.covid.deaths") "%" else ""
 		
 		ylim<-if(split.groups&&plot=="smooth")
 			c(0,max(sapply(CD,max))) else c(0,1.2*max(cd))
+
+		ylim<-if(split.groups&&plot!="smooth"&&show=="percent.of.covid.deaths")
+			c(0,120)
+		
 		plot(NA,xlim=xlim,ylim=ylim,bty="n",axes=FALSE,
 			xlab="",ylab="")
 		cols<-colorRampPalette(colors=brewer.pal("YlOrRd",n=8))(52)
