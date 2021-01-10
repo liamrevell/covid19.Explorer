@@ -159,7 +159,6 @@ covid.deaths<-function(
 				tots<-rep(0,length(cd))
 				for(i in length(age.group):1){
 					for(j in length(sex):1){
-						print(CD[[i]][,j]+tots)
 						polygon(x=c(xx,xx[length(xx):1]),
 							y=c(CD[[i]][,j]+tots,tots[length(tots):1]),
 							border=FALSE,col=Cols[names(CD)[i],j])
