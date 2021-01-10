@@ -17,7 +17,7 @@ covid.deaths<-function(
 	all.causes=TRUE,
 	cumulative=FALSE,
 	data=list(),
-	xlim=c(0,397),
+	xlim=c(32,366),
 	bg="transparent",
 	plot=c("standard","smooth","bar"),
 	show=c("raw","per.capita","percent","percent.of.covid.deaths"),
@@ -39,6 +39,7 @@ covid.deaths<-function(
 		DD<-DD[ii,]
 
 		mmwr<-sort(unique(DD$MMWR.Week))
+		mmwr<-mmwr[6:length(mmwr)]
 		cd<-sapply(mmwr,function(week,DD) 
 			sum(DD$COVID.19.Deaths[which(DD$MMWR.Week==week)]),
 			DD=DD)
@@ -55,10 +56,10 @@ covid.deaths<-function(
 			for(j in 1:length(sex)){
 				ii<-which(DD$Age.Group%in%age.group[i])
 				jj<-which(DD$Sex%in%sex[j])
-				CD[[i]][,j]<-if(cumulative) cumsum(DD[intersect(ii,jj),"COVID.19.Deaths"]) else
-					DD[intersect(ii,jj),"COVID.19.Deaths"]
-				TD[[i]][,j]<-if(cumulative) cumsum(DD[intersect(ii,jj),"Total.Deaths"]) else
-					DD[intersect(ii,jj),"Total.Deaths"]
+				CD[[i]][,j]<-if(cumulative) cumsum(DD[intersect(ii,jj),"COVID.19.Deaths"][mmwr]) else
+					DD[intersect(ii,jj),"COVID.19.Deaths"][mmwr]
+				TD[[i]][,j]<-if(cumulative) cumsum(DD[intersect(ii,jj),"Total.Deaths"][mmwr]) else
+					DD[intersect(ii,jj),"Total.Deaths"][mmwr]
 			}
 		}
 
@@ -114,7 +115,7 @@ covid.deaths<-function(
 		mm<-c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug",
 			"Sep","Oct","Nov","Dec","Jan", "Feb (2021)")
 
-		xx<-seq(from=0.5,by=7,length.out=length(td))
+		xx<-seq(from=35.5,by=7,length.out=length(td))
 
 		par(mfrow=c(2,1),mar=c(5.1,5.1,3.1,3.1),bg=bg)
 		
