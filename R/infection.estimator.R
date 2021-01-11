@@ -167,7 +167,7 @@ infection.estimator<-function(state="Massachusetts",
 			v<-do.call(axis,Args)
 			title(ylab="ratio",line=4)
 			plot<-FALSE
-			mtext(paste("b)",state,"daily estimated infections/confirmed cases"),
+			mtext(paste("b)",state,"daily confirmed cases/estimated infections"),
 				adj=0,line=1,cex=1.2)
 		}
 		if(delay>0){

@@ -316,6 +316,7 @@ covid.deaths<-function(
 		else
 			mtext(paste("b) weekly COVID-19 and non-COVID deaths",pp),adj=0,line=1,cex=1.2)
 	}
+	invisible(list(CD=CD,TD=TD))
 }
 
 shade<-function(rgb,deviation=10){
