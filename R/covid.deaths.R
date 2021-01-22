@@ -1,5 +1,11 @@
 ## https://data.cdc.gov/NCHS/Provisional-COVID-19-Death-Counts-by-Sex-Age-and-W/vsak-wrfu
 
+IN<-function(x,y){
+	x<-toupper(x)
+	y<-toupper(y)
+	x%in%y
+}
+
 covid.deaths<-function(
 	age.group=c(
 	"Under 1 year",
@@ -17,7 +23,7 @@ covid.deaths<-function(
 	all.causes=TRUE,
 	cumulative=FALSE,
 	data=list(),
-	xlim=c(32,366),
+	xlim=c(32,366+15),
 	bg="transparent",
 	plot=c("standard","smooth","bar"),
 	show=c("raw","per.capita","percent","percent.of.covid.deaths"),
@@ -33,13 +39,21 @@ covid.deaths<-function(
 	
 	if(length(age.group)>0 && length(sex)>0){
 		
-		ii<-which(CovidDeaths$Age.Group%in%age.group)
-		DD<-CovidDeaths[ii,]
+		DD<-CovidDeaths
+
+		dates<-as.Date(DD$End.Week,format="%m/%d/%Y")
+		ii<-which(dates>="2021-01-09")
+		DD$MMWR.Week[ii]<-DD$MMWR.Week[ii]+53
+
+		ii<-which(IN(DD$Age.Group,age.group))
+		DD<-DD[ii,]
+
 		ii<-which(DD$Sex%in%sex)
 		DD<-DD[ii,]
 
 		mmwr<-sort(unique(DD$MMWR.Week))
 		mmwr<-mmwr[6:length(mmwr)]
+
 		cd<-sapply(mmwr,function(week,DD) 
 			sum(DD$COVID.19.Deaths[which(DD$MMWR.Week==week)]),
 			DD=DD)
@@ -54,7 +68,7 @@ covid.deaths<-function(
 			CD[[i]]<-matrix(NA,length(cd),length(sex),dimnames=list(mmwr,sex))
 			TD[[i]]<-matrix(NA,length(td),length(sex),dimnames=list(mmwr,sex))
 			for(j in 1:length(sex)){
-				ii<-which(DD$Age.Group%in%age.group[i])
+				ii<-which(IN(DD$Age.Group,age.group[i]))
 				jj<-which(DD$Sex%in%sex[j])
 				CD[[i]][,j]<-if(cumulative) cumsum(DD[intersect(ii,jj),"COVID.19.Deaths"][mmwr]) else
 					DD[intersect(ii,jj),"COVID.19.Deaths"][mmwr]
