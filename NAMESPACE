@@ -1,8 +1,9 @@
-export(age.deaths, compare.infections, covid.deaths, infection.estimator, infection.range.estimator, infections.by.state, state.deaths)
+export(age.deaths, compare.infections, covid.deaths, iceberg.plot, infection.estimator, infection.range.estimator, infections.by.state, state.deaths)
 
 importFrom(grDevices, col2rgb, colorRampPalette, grey, palette, rgb)
 importFrom(graphics, abline, axis, box, legend, lines, mtext, par, points, polygon, strwidth, text, title)
 importFrom(maps, map)
+importFrom(methods, hasArg)
 importFrom(phytools, make.transparent)
 importFrom(randomcoloR, distinctColorPalette)
 importFrom(RColorBrewer, brewer.pal)
