@@ -90,7 +90,7 @@ iceberg.plot<-function(
 		border=FALSE)
 	lines(c(1,length(Infections)),rep(0,2),col=palette()[4])
 	legend("topleft",c(paste("confirmed COVID-19 infections",state),
-		"estimated infections - confirmed"),pch=15,cex=0.9,
+		"estimated unobserved infections"),pch=15,cex=0.9,
 		col=c(palette()[4],make.transparent(palette()[4],0.5)),
 		pt.cex=1.5,bty="n",xpd=TRUE,xjust=0.5,yjust=1)
 }
