@@ -1,6 +1,6 @@
 Package: covid19.Explorer
-Version: 0.7
-Date: 2021-01-27
+Version: 0.8
+Date: 2021-01-29
 Title: A COVID-19 Explorer
 Author: Liam J. Revell [aut, cre]
 Maintainer: Liam J. Revell <liam.revell@umb.edu>
