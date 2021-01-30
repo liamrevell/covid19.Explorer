@@ -36,7 +36,7 @@ state.deaths<-function(
 	rownames(States)[nrow(States)]<-"New York City"
 	States<-rbind(States,colSums(States))
 	rownames(States)[nrow(States)]<-"United States"
-	Deaths<-matrix(NA,52,6,dimnames=list(1:52,2015:2020))
+	Deaths<-matrix(NA,53,6,dimnames=list(1:53,2015:2020))
 	ii<-which(Counts[,1]==state)
 	for(i in 1:4){
 		jj<-which(Counts$MMWR.Year==2014+i)
@@ -49,6 +49,7 @@ state.deaths<-function(
 		jj<-intersect(ii,jj)
 		Deaths[1:length(jj),i]<-Provis[jj,"All.Cause"]
 	}
+	Deaths<-Deaths[1:52,]
 	PerCapita<-(Deaths/matrix(as.numeric(States[state,]),52,6,
 		byrow=TRUE))*1000000
 	PerCapitaExcess<-PerCapita-matrix(rowMeans(PerCapita[,1:5]),52,6)

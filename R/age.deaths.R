@@ -13,12 +13,12 @@ age.deaths<-function(
 	if(plot==FALSE) PLOT<-FALSE
 	else PLOT<-TRUE
 	if(length(age.group)>0){
-		leg1.bg<-colorRampPalette(colors=c("white", "#E8E8E8"))(10)[2]
+		leg1.bg<-"transparent" ## colorRampPalette(colors=c("white", "#E8E8E8"))(10)[2]
 		RGB<-col2rgb(leg1.bg)[,1]/255
-        leg1.bg<-rgb(RGB[1],RGB[2],RGB[3],0.75)
-		leg2.bg<-colorRampPalette(colors=c("white", "#E8E8E8"))(10)[7]
+       	leg1.bg<-"transparent" ## rgb(RGB[1],RGB[2],RGB[3],0.75)
+		leg2.bg<-"transparent" ## colorRampPalette(colors=c("white", "#E8E8E8"))(10)[7]
 		RGB<-col2rgb(leg2.bg)[,1]/255
-        leg2.bg<-rgb(RGB[1],RGB[2],RGB[3],0.75)
+        	leg2.bg<-"transparent" ## rgb(RGB[1],RGB[2],RGB[3],0.75)
 		plot<-plot[1]
 		ss<-state
 		if(state=="New York (excluding NYC)") state<-"New York"
@@ -47,7 +47,7 @@ age.deaths<-function(
 		rownames(States)[nrow(States)]<-"New York City"
 		States<-rbind(States,colSums(States))
 		rownames(States)[nrow(States)]<-"United States"
-		Deaths<-matrix(0,52,6,dimnames=list(1:52,2015:2020))
+		Deaths<-matrix(0,53,6,dimnames=list(1:53,2015:2020))
 		ii<-which(Counts$Type=="Predicted (weighted)")
 		Counts<-Counts[ii,]
 		nn<-max(Counts[which(Counts$Year==2020),]$Week)
@@ -63,6 +63,10 @@ age.deaths<-function(
 			}
 		}
 		if(nn<52) Deaths[(nn+1):52,i]<-NA
+		if(nn>52){ 
+			Deaths<-Deaths[1:52,]
+			nn<-52
+		}
 		if(any(Deaths[!is.na(Deaths)]==0)){
 			pp<-sum(Deaths[!is.na(Deaths)]==0)/length(Deaths[!is.na(Deaths)]==0)
 			foo<-function(x,pp) (pp-ppois(10,x))^2
