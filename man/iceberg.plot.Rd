@@ -11,7 +11,7 @@
 		smooth=TRUE,
 		span=c(0.2,0.3),
 		bg="transparent",
-		xlim=c(60,366+31),
+		xlim=c(60,366+46),
 		...)
 }
 \arguments{

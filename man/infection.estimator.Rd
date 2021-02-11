@@ -13,7 +13,7 @@
 		percent=FALSE,
 		plot=TRUE,
 		bg="transparent",
-		xlim=c(60,366+31),
+		xlim=c(60,366+46),
 		show.points=FALSE,
 		...)
 }

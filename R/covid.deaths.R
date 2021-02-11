@@ -23,7 +23,7 @@ covid.deaths<-function(
 	all.causes=TRUE,
 	cumulative=FALSE,
 	data=list(),
-	xlim=c(32,366+31),
+	xlim=c(32,366+46),
 	bg="transparent",
 	plot=c("standard","smooth","bar"),
 	show=c("raw","per.capita","percent","percent.of.covid.deaths"),

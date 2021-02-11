@@ -26,7 +26,7 @@ infection.range.estimator<-function(state="Massachusetts",
 	percent=FALSE,
 	plot=TRUE,
 	bg="transparent",
-	xlim=c(60,366+31),
+	xlim=c(60,366+46),
 	...){
 	ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,31,28))
 	mm<-c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug",
