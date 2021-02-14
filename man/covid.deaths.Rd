@@ -24,6 +24,7 @@
 		plot=c("standard","smooth","bar"),
 		show=c("raw","per.capita","percent","percent.of.covid.deaths"),
 		split.groups=TRUE,
+		show.total.deaths=TRUE,
 		...)
 }
 \arguments{
@@ -37,6 +38,7 @@
 	\item{plot}{plotting options.}
 	\item{show}{what to plot.}
 	\item{split.groups}{split groups (logical).}
+	\item{show.total.deaths}{show total deaths (logica).}
 	\item{...}{optional arguments.}
 }
 \description{
