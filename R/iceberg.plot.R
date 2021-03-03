@@ -7,7 +7,7 @@ iceberg.plot<-function(
 	smooth=TRUE,
 	span=c(0.2,0.3),
 	bg="transparent",
-	xlim=c(60,366+46),
+	xlim=c(60,366+59),
 	...){
 	if(state!="New York"){
 		Infections<-infection.estimator(
@@ -61,9 +61,9 @@ iceberg.plot<-function(
 			plot=FALSE)
 	}
 	Infections<-Infections-Cases
-	ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,31,28))
+	ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,31,28,31))
 	mm<-c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug",
-		"Sep","Oct","Nov","Dec","Jan","Feb","Mar")
+		"Sep","Oct","Nov","Dec","Jan","Feb","Mar","Apr")
 	ttime<-max(ms)
 	par(bg=bg)
 	plot(NA,xlim=xlim,xlab="",ylab="",

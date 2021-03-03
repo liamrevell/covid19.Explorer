@@ -26,11 +26,11 @@ infection.range.estimator<-function(state="Massachusetts",
 	percent=FALSE,
 	plot=TRUE,
 	bg="transparent",
-	xlim=c(60,366+46),
+	xlim=c(60,366+59),
 	...){
-	ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,31,28))
+	ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,31,28,31))
 	mm<-c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug",
-		"Sep","Oct","Nov","Dec","Jan","Feb","Mar")
+		"Sep","Oct","Nov","Dec","Jan","Feb","Mar","Apr")
 	ttime<-max(ms)
 	if(length(ifr.low)>1&&length(ifr.low)==length(ifr.high)){
 		IFR<-rbind(ifr.low,ifr.high)
