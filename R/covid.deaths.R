@@ -126,9 +126,9 @@ covid.deaths<-function(
 			if(show%in%c("per.capita","percent")&&plot%in%c("bar","standard")) 
 				plot<-"smooth"
 
-		ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,31,28))
+		ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,31,28,31))
 		mm<-c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug",
-			"Sep","Oct","Nov","Dec","Jan", "Feb","Mar")
+			"Sep","Oct","Nov","Dec","Jan", "Feb","Mar","Apr")
 
 		xx<-seq(from=35.5,by=7,length.out=length(td))
 
