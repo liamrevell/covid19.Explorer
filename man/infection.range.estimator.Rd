@@ -14,7 +14,7 @@
 		percent=FALSE,
 		plot=TRUE,
 		bg="transparent",
-		xlim=c(60,366+46),
+		xlim=c(60,366+59),
 		...)
 }
 \arguments{
