@@ -418,7 +418,9 @@ infections.by.state<-function(states=NULL,
 		}
 		par(mar=c(5.1,5.1,2.1,3.1),bg=bg)
 		yex<-if(show.as.percent) 1.2 else 1.05
-		plot(NA,xlim=xlim,ylim=c(0,yex*max(cumCases,na.rm=TRUE)),
+		if(hasArg(ylim)) ylim<-list(...)$ylim
+		else ylim<-c(0,yex*max(cumCases,na.rm=TRUE))
+		plot(NA,xlim=xlim,ylim=ylim,
 			bty="n",xlab="",
 			ylab="",axes=FALSE)
 		tt<-1:nrow(cumCases)
@@ -459,6 +461,7 @@ infections.by.state<-function(states=NULL,
 		Args$at<-ms
 		Args$labels<-mm
 		v<-do.call(axis,Args)
+		old.usr<-par()$usr
 		if(show.ifr){
 			par(usr=c(par()$usr[1:2],-0.08,2.08))
 			Args<-list(...)
@@ -484,6 +487,7 @@ infections.by.state<-function(states=NULL,
 			ylab="",axes=FALSE)
 		nulo<-apply(Cases,2,lines)
 	}
+	par(usr=old.usr)
 	invisible(Cases)
 }
 
