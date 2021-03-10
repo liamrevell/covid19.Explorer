@@ -570,8 +570,11 @@ compare.infections<-function(states=
 	denom<-if(per.capita) " / 1M" else ""
 	if(length(states)>0){
 		set.seed(999)
-		cols<-if(length(states)==1) "black" else 
-			c("black",distinctColorPalette(length(states)-1))
+		if(hasArg(cols)) cols<-list(...)
+		else {
+			cols<-if(length(states)==1) "black" else 
+				c("black",distinctColorPalette(length(states)-1))
+		}
 		## plot deaths
 		dd<-list()
 		for(i in 1:length(states)){

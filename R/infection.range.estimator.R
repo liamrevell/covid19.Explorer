@@ -123,7 +123,7 @@ infection.range.estimator<-function(state="Massachusetts",
 	par(usr=c(par()$usr[1:2],ylim))
 	for(i in 1:length(newDeaths)){
 		col<-col2rgb(cols[3])/256
-		col<-rgb(col[1],col[2],col[2],alpha=0.2)
+		col<-rgb(col[1],col[2],col[2],alpha=alpha)
 		polygon(i+c(-0.5,0.5,0.5,-0.5),
 			c(0,0,newDeaths[i],newDeaths[i]),
 			border=FALSE,col=col)
