@@ -15,6 +15,7 @@
 		plot=TRUE,
 		bg="transparent",
 		xlim=c(60,366+59),
+		alpha=0.25,
 		...)
 }
 \arguments{
@@ -31,6 +32,7 @@
 	\item{plot}{create a plot (logical).}
 	\item{bg}{background color for plots.}
 	\item{xlim}{\emph{x}-limits for the plot.}
+	\item{alpha}{alpha transparency level for transparent elements of the plot.}
 	\item{...}{optional arguments.}
 }
 \description{

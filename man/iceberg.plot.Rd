@@ -12,6 +12,7 @@
 		span=c(0.2,0.3),
 		bg="transparent",
 		xlim=c(60,366+59),
+		alpha=0.5,
 		...)
 }
 \arguments{
@@ -24,6 +25,7 @@
 	\item{smooth}{smooth estimated infections (logical).}
 	\item{bg}{background color for plots.}
 	\item{xlim}{\emph{x}-limits for the plot.}
+	\item{alpha}{alpha transparency level for transparent elements of the plot.}
 	\item{...}{optional arguments.}
 }
 \description{

@@ -21,7 +21,9 @@ infection.estimator<-function(state="Massachusetts",
 	bg="transparent",
 	xlim=c(60,366+59),
 	show.points=FALSE,
+	alpha=c(0.25,0.8),
 	...){
+	if(length(alpha)==1) alpha<-rep(alpha,2)
 	if(hasArg(getCases)) getCases<-list(...)$getCases
 	else getCases<-FALSE
 	if(getCases) plot<-FALSE
@@ -35,7 +37,7 @@ infection.estimator<-function(state="Massachusetts",
 	} else show.cr<-FALSE
 	if(smooth) if(length(span)==1) span<-c(span,0.3)
 	cols<-make.transparent(c("darkgreen",palette()[c(4,2)]),
-		0.8)
+		alpha[2])
 	ifr<-make.ifr(ifr,ttime,smooth=smooth,span=span)
 	if(plot){
 		par(mfrow=c(2,1),mar=c(5.1,5.1,3.1,3.1),bg=bg)
@@ -111,7 +113,7 @@ infection.estimator<-function(state="Massachusetts",
 		par(usr=c(par()$usr[1:2],ylim))
 		for(i in 1:length(newDeaths)){
 			col<-col2rgb(cols[3])/256
-			col<-rgb(col[1],col[2],col[2],alpha=0.2)
+			col<-rgb(col[1],col[2],col[2],alpha=alpha[1])
 			polygon(i+c(-0.5,0.5,0.5,-0.5),
 				c(0,0,newDeaths[i],newDeaths[i]),
 				border=FALSE,col=col)
@@ -308,7 +310,7 @@ infection.estimator<-function(state="Massachusetts",
 					cumsum(Cases$new_case[1:length(CR)+length(Cases$new_case)-
 					length(CR)]/CR))
 				if(percent) ee<-ee/population*100
-				points(ee,pch=16,col=make.transparent("grey",0.8),cex=0.7)
+				points(ee,pch=16,col=make.transparent("grey",alpha[2]),cex=0.7)
 			}
 			mtext(paste("b)",state,"cumulative observed or estimated infections"),
 				adj=0,line=1,cex=1.2)

@@ -8,6 +8,7 @@ iceberg.plot<-function(
 	span=c(0.2,0.3),
 	bg="transparent",
 	xlim=c(60,366+59),
+	alpha=0.5,
 	...){
 	if(state!="New York"){
 		Infections<-infection.estimator(
@@ -86,7 +87,7 @@ iceberg.plot<-function(
 	v<-do.call(axis,Args)
 	T<-length(Infections)
 	polygon(c(1:T,T,1),c(Cases,0,0),col=palette()[4],border=FALSE)
-	polygon(c(1:T,T,1),c(-Infections,0,0),col=make.transparent(palette()[4],0.5),
+	polygon(c(1:T,T,1),c(-Infections,0,0),col=make.transparent(palette()[4],alpha),
 		border=FALSE)
 	lines(c(1,length(Infections)),rep(0,2),col=palette()[4])
 	legend("topleft",c(paste("confirmed COVID-19 infections",state),

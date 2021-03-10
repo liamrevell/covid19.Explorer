@@ -27,6 +27,7 @@ infection.range.estimator<-function(state="Massachusetts",
 	plot=TRUE,
 	bg="transparent",
 	xlim=c(60,366+59),
+	alpha=0.25,
 	...){
 	ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,31,28,31))
 	mm<-c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug",
@@ -56,7 +57,7 @@ infection.range.estimator<-function(state="Massachusetts",
 		v<-do.call(axis,Args)
 		polygon(c(1:length(ifr.low),length(ifr.high):1),
 			100*c(ifr.low,ifr.high[length(ifr.high):1]),
-			col=make.transparent(cols[2],0.25),
+			col=make.transparent(cols[2],alpha),
 			border=FALSE)
 		ifr.mid<-colMeans(rbind(ifr.low,ifr.high))
 		lines(1:length(ifr.low),100*ifr.mid,
@@ -196,7 +197,7 @@ infection.range.estimator<-function(state="Massachusetts",
 	v<-do.call(axis,Args)
 	T<-length(e.low)
 	polygon(c(1:T,T:1),c(e.low,e.high[T:1]),border=FALSE,
-		col=make.transparent(cols[1],0.25))
+		col=make.transparent(cols[1],alpha))
 	lines(1:T,e.mid,lty="dotted",lwd=2,col=cols[1])
 	if(cumulative) mtext(paste("b)",state,"estimated cumulative infections"),
 		adj=0,line=1,cex=1.2) else mtext(paste("b)",state,
@@ -205,7 +206,7 @@ infection.range.estimator<-function(state="Massachusetts",
 		c("mid-IFR infections",
 		"range"),
 		pch=c(NA,15),cex=0.9,col=c(cols[1],
-		make.transparent(cols[1],0.25)),
+		make.transparent(cols[1],alpha)),
 		lty=c("dotted",NA),lwd=c(2,NA),
 		pt.cex=c(NA,1.5),bty="n",xpd=TRUE,
 		xjust=0.5,yjust=1)

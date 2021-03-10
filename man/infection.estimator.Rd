@@ -15,6 +15,7 @@
 		bg="transparent",
 		xlim=c(60,366+59),
 		show.points=FALSE,
+		alpha=c(0.25,0.8),
 		...)
 }
 \arguments{
@@ -31,6 +32,7 @@
 	\item{bg}{background color for plots.}
 	\item{xlim}{\emph{x}-limits for the plot.}
 	\item{show.points}{show points used in LOESS smoothing (logical).}
+	\item{alpha}{alpha transparency levels for transparent elements of the plot.}
 	\item{...}{optional arguments.}
 }
 \description{
