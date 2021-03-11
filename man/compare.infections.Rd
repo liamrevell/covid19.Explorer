@@ -15,6 +15,7 @@
 		bg="transparent",
 		xlim=c(60,366+59),
 		per.capita=TRUE,
+		cols=NULL,
 		...)
 }
 \arguments{
@@ -30,6 +31,7 @@
 	\item{bg}{background color for plots.}
 	\item{xlim}{\emph{x}-limits for the plot.}
 	\item{per.capita}{show values as per 1M population (logical).}
+	\item{cols}{colors to use for plotting.}
 	\item{...}{optional arguments.}
 }
 \description{

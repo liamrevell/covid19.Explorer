@@ -561,6 +561,7 @@ compare.infections<-function(states=
 	bg="transparent",
 	xlim=c(60,366+59),
 	per.capita=TRUE,
+	cols=NULL,
 	...){
 	states<-states[!is.null(states)]
 	ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,31,28,31))
@@ -570,8 +571,7 @@ compare.infections<-function(states=
 	denom<-if(per.capita) " / 1M" else ""
 	if(length(states)>0){
 		set.seed(999)
-		if(hasArg(cols)) cols<-list(...)
-		else {
+		if(is.null(cols)){
 			cols<-if(length(states)==1) "black" else 
 				c("black",distinctColorPalette(length(states)-1))
 		}
