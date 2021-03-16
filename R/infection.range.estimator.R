@@ -29,9 +29,9 @@ infection.range.estimator<-function(state="Massachusetts",
 	xlim=c(60,366+90),
 	alpha=0.25,
 	...){
-	ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,31,28,31))
+	ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,31,28,31,30))
 	mm<-c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug",
-		"Sep","Oct","Nov","Dec","Jan","Feb","Mar","Apr")
+		"Sep","Oct","Nov","Dec","Jan","Feb","Mar","Apr","May")
 	ttime<-max(ms)
 	if(length(ifr.low)>1&&length(ifr.low)==length(ifr.high)){
 		IFR<-rbind(ifr.low,ifr.high)

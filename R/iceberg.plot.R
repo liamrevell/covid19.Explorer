@@ -62,9 +62,9 @@ iceberg.plot<-function(
 			plot=FALSE)
 	}
 	Infections<-Infections-Cases
-	ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,31,28,31))
+	ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,31,28,31,30))
 	mm<-c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug",
-		"Sep","Oct","Nov","Dec","Jan","Feb","Mar","Apr")
+		"Sep","Oct","Nov","Dec","Jan","Feb","Mar","Apr","May")
 	ttime<-max(ms)
 	par(bg=bg)
 	plot(NA,xlim=xlim,xlab="",ylab="",

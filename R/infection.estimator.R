@@ -27,9 +27,9 @@ infection.estimator<-function(state="Massachusetts",
 	if(hasArg(getCases)) getCases<-list(...)$getCases
 	else getCases<-FALSE
 	if(getCases) plot<-FALSE
-	ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,31,28,31))
+	ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,31,28,31,30))
 	mm<-c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug",
-		"Sep","Oct","Nov","Dec","Jan","Feb","Mar","Apr")
+		"Sep","Oct","Nov","Dec","Jan","Feb","Mar","Apr","May")
 	ttime<-max(ms)
 	if(plot=="infection.ratio"){ 
 		show.cr<-TRUE
@@ -341,9 +341,9 @@ infections.by.state<-function(states=NULL,
 	show.as.percent=FALSE,
 	...){
 	if(length(span)==1) span<-c(span,0.3)
-	ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,31,28,31))
+	ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,31,28,31,30))
 	mm<-c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug",
-		"Sep","Oct","Nov","Dec","Jan","Feb","Mar","Apr")
+		"Sep","Oct","Nov","Dec","Jan","Feb","Mar","Apr","May")
 	ttime<-max(ms)
 	ifr<-make.ifr(ifr,ttime,smooth=smooth,span=span)
 	if(is.null(states)) 
@@ -564,9 +564,9 @@ compare.infections<-function(states=
 	cols=NULL,
 	...){
 	states<-states[!is.null(states)]
-	ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,31,28,31))
+	ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,31,28,31,30))
 	mm<-c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug",
-		"Sep","Oct","Nov","Dec","Jan","Feb","Mar","Apr")
+		"Sep","Oct","Nov","Dec","Jan","Feb","Mar","Apr","May")
 	ttime<-max(ms)
 	denom<-if(per.capita) " / 1M" else ""
 	if(length(states)>0){
