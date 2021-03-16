@@ -8,6 +8,16 @@ moving.average<-function(x,window=7){
 	ma
 }
 
+relabel.axis<-function(h){
+	labs<-vector()
+	for(i in 1:length(h)){
+		if(h[i]>=1e3&&h[i]<1e6) labs[i]<-paste(h[i]/1000,"k",sep="")
+		else if(h[i]>=1e6) labs[i]<-paste(h[i]/1000000,"M",sep="")
+		else labs[i]<-h[i]
+	}
+	labs
+}	
+
 infection.estimator<-function(state="Massachusetts",
 	cumulative=FALSE,
 	data=list(),
@@ -445,10 +455,7 @@ infections.by.state<-function(states=NULL,
 		Args$at<-h
 		if(show.as.percent){
 			Args$labels<-paste(h,"%",sep="")
-		} else {
-			Args$labels<-if(cumulative) paste(h/1000000,"M",sep="") else
-				paste(h/1000,"k",sep="")
-		}
+		} else Args$labels<-relabel.axis(h)
 		do.call(axis,Args)
 		abline(h=h,col=grey(0.75),lwd=1,lty="dotted")
 		if(show.as.percent) 
