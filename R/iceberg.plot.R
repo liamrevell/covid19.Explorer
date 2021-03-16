@@ -75,10 +75,7 @@ iceberg.plot<-function(
 	Args$labels<-FALSE
 	h<-do.call(axis,Args)
 	Args$at<-h
-	Args$labels<-if(max(Infections+Cases)>1000000) 
-		paste(abs(h)/1000000,"M",sep="") else
-		if(max(Infections+Cases)>1000) paste(abs(h)/1000,"k",sep="") else 
-		abs(h)
+	Args$labels<-relabel.axis(h,abs.val=TRUE)
 	do.call(axis,Args)
 	abline(h=h,col=grey(0.75),lwd=1,lty="dotted")
 	Args$side<-1

@@ -8,12 +8,13 @@ moving.average<-function(x,window=7){
 	ma
 }
 
-relabel.axis<-function(h){
+relabel.axis<-function(h,abs.val=FALSE){
 	labs<-vector()
+	foo<-if(abs.val) abs else function(x) x
 	for(i in 1:length(h)){
-		if(h[i]>=1e3&&h[i]<1e6) labs[i]<-paste(h[i]/1000,"k",sep="")
-		else if(h[i]>=1e6) labs[i]<-paste(h[i]/1000000,"M",sep="")
-		else labs[i]<-h[i]
+		if(h[i]>=1e3&&h[i]<1e6) labs[i]<-paste(foo(h[i])/1000,"k",sep="")
+		else if(h[i]>=1e6) labs[i]<-paste(foo(h[i])/1000000,"M",sep="")
+		else labs[i]<-foo(h[i])
 	}
 	labs
 }	
@@ -230,8 +231,7 @@ infection.estimator<-function(state="Massachusetts",
 			if(percent)
 				Args$labels<-paste(h,"%",sep="")
 			else
-				Args$labels<-if(max(estCases)>1000000) paste(h/1000000,"M",sep="") else
-					if(max(estCases)>1000) paste(h/1000,"k",sep="") else h
+				Args$labels<-relabel.axis(h)
 			do.call(axis,Args)
 			abline(h=h,col=grey(0.75),lwd=1,lty="dotted")
 			Args$side<-1
@@ -291,8 +291,7 @@ infection.estimator<-function(state="Massachusetts",
 			if(percent)
 				Args$labels<-paste(h,"%",sep="")
 			else
-				Args$labels<-if(max(estCases)>1000000) paste(h/1000000,"M",sep="") else
-					if(max(estCases)>1000) paste(h/1000,"k",sep="") else h
+				Args$labels<-relabel.axis(h)
 			do.call(axis,Args)
 			abline(h=h,col=grey(0.75),lwd=1,lty="dotted")
 			Args$side<-1
@@ -617,8 +616,7 @@ compare.infections<-function(states=
 		Args$at<-NULL
 		h<-do.call(axis,Args)
 		Args$at<-h
-		Args$labels<-if(max(h)>1000000) paste(h/1000000,"M",sep="") else
-			if(max(h)>1000) paste(h/1000,"k",sep="") else h
+		Args$labels<-relabel.axis(h)
 		abline(h=h,col=grey(0.75),lwd=1,lty="dotted")
 		do.call(axis,Args)
 		mapply(lines,dd,col=cols,MoreArgs=list(lty="dashed"))
@@ -662,8 +660,7 @@ compare.infections<-function(states=
 		Args$at<-NULL
 		h<-do.call(axis,Args)
 		Args$at<-h
-		Args$labels<-if(max(h)>1000000) paste(h/1000000,"M",sep="") else
-			if(max(h)>1000) paste(h/1000,"k",sep="") else h
+		Args$labels<-relabel.axis(h)
 		abline(h=h,col=grey(0.75),lwd=1,lty="dotted")
 		do.call(axis,Args)
 		mapply(lines,ii,col=cols,MoreArgs=list(lty="dashed"))
