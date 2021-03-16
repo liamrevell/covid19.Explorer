@@ -19,7 +19,7 @@ infection.estimator<-function(state="Massachusetts",
 	percent=FALSE,
 	plot=TRUE,
 	bg="transparent",
-	xlim=c(60,366+59),
+	xlim=c(60,366+90),
 	show.points=FALSE,
 	alpha=c(0.25,0.8),
 	...){
@@ -337,7 +337,7 @@ infections.by.state<-function(states=NULL,
 	span=c(0.2,0.3),
 	show.ifr=TRUE,
 	bg="transparent",
-	xlim=c(60,366+59),
+	xlim=c(60,366+90),
 	show.as.percent=FALSE,
 	...){
 	if(length(span)==1) span<-c(span,0.3)
@@ -559,7 +559,7 @@ compare.infections<-function(states=
 	span=c(0.2,0.3),
 	plot=TRUE,
 	bg="transparent",
-	xlim=c(60,366+59),
+	xlim=c(60,366+90),
 	per.capita=TRUE,
 	cols=NULL,
 	...){

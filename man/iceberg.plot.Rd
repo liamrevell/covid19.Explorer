@@ -11,7 +11,7 @@
 		smooth=TRUE,
 		span=c(0.2,0.3),
 		bg="transparent",
-		xlim=c(60,366+59),
+		xlim=c(60,366+90),
 		alpha=0.5,
 		...)
 }
