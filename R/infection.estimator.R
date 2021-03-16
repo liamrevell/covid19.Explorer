@@ -12,8 +12,8 @@ relabel.axis<-function(h,abs.val=FALSE){
 	labs<-vector()
 	foo<-if(abs.val) abs else function(x) x
 	for(i in 1:length(h)){
-		if(h[i]>=1e3&&h[i]<1e6) labs[i]<-paste(foo(h[i])/1000,"k",sep="")
-		else if(h[i]>=1e6) labs[i]<-paste(foo(h[i])/1000000,"M",sep="")
+		if(abs(h[i])>=1e3&&abs(h[i])<1e6) labs[i]<-paste(foo(h[i])/1000,"k",sep="")
+		else if(abs(h[i])>=1e6) labs[i]<-paste(foo(h[i])/1000000,"M",sep="")
 		else labs[i]<-foo(h[i])
 	}
 	labs
