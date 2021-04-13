@@ -10,10 +10,10 @@
 		ifr=0.005,
 		window=7,
 		smooth=TRUE,
-		span=c(0.2,0.3),
+		span=c(0.12,0.3),
 		show.ifr=TRUE,
 		bg="transparent",
-		xlim=c(60,366+90),
+		xlim=c(60,366+105),
 		show.as.percent=FALSE,
 		...)
 }

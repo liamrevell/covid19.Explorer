@@ -10,11 +10,11 @@
 		ifr.high=0.006,
 		window=7,
 		smooth=TRUE,
-		span=c(0.2,0.3),
+		span=c(0.12,0.3),
 		percent=FALSE,
 		plot=TRUE,
 		bg="transparent",
-		xlim=c(60,366+90),
+		xlim=c(60,366+105),
 		alpha=0.25,
 		...)
 }

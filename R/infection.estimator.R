@@ -26,11 +26,11 @@ infection.estimator<-function(state="Massachusetts",
 	ifr=0.005,
 	window=7,
 	smooth=TRUE,
-	span=c(0.2,0.3),
+	span=c(0.12,0.3),
 	percent=FALSE,
 	plot=TRUE,
 	bg="transparent",
-	xlim=c(60,366+90),
+	xlim=c(60,366+105),
 	show.points=FALSE,
 	alpha=c(0.25,0.8),
 	...){
@@ -38,9 +38,9 @@ infection.estimator<-function(state="Massachusetts",
 	if(hasArg(getCases)) getCases<-list(...)$getCases
 	else getCases<-FALSE
 	if(getCases) plot<-FALSE
-	ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,31,28,31,30))
+	ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,31,28,31,30,31))
 	mm<-c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug",
-		"Sep","Oct","Nov","Dec","Jan","Feb","Mar","Apr","May")
+		"Sep","Oct","Nov","Dec","Jan","Feb","Mar","Apr","May","Jun")
 	ttime<-max(ms)
 	if(plot=="infection.ratio"){ 
 		show.cr<-TRUE
@@ -343,16 +343,16 @@ infections.by.state<-function(states=NULL,
 	ifr=0.005,
 	window=7,
 	smooth=TRUE,
-	span=c(0.2,0.3),
+	span=c(0.12,0.3),
 	show.ifr=TRUE,
 	bg="transparent",
-	xlim=c(60,366+90),
+	xlim=c(60,366+105),
 	show.as.percent=FALSE,
 	...){
 	if(length(span)==1) span<-c(span,0.3)
-	ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,31,28,31,30))
+	ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,31,28,31,30,31))
 	mm<-c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug",
-		"Sep","Oct","Nov","Dec","Jan","Feb","Mar","Apr","May")
+		"Sep","Oct","Nov","Dec","Jan","Feb","Mar","Apr","May","Jun")
 	ttime<-max(ms)
 	ifr<-make.ifr(ifr,ttime,smooth=smooth,span=span)
 	if(is.null(states)) 
@@ -562,17 +562,17 @@ compare.infections<-function(states=
 	ifr=0.005,
 	window=7,
 	smooth=TRUE,
-	span=c(0.2,0.3),
+	span=c(0.12,0.3),
 	plot=TRUE,
 	bg="transparent",
-	xlim=c(60,366+90),
+	xlim=c(60,366+105),
 	per.capita=TRUE,
 	cols=NULL,
 	...){
 	states<-states[!is.null(states)]
-	ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,31,28,31,30))
+	ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,31,28,31,30,31))
 	mm<-c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug",
-		"Sep","Oct","Nov","Dec","Jan","Feb","Mar","Apr","May")
+		"Sep","Oct","Nov","Dec","Jan","Feb","Mar","Apr","May","Jun")
 	ttime<-max(ms)
 	denom<-if(per.capita) " / 1M" else ""
 	if(length(states)>0){
