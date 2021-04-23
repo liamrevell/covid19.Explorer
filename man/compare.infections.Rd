@@ -16,6 +16,7 @@
 		xlim=c(60,366+105),
 		per.capita=TRUE,
 		cols=NULL,
+		cdr=c("sigmoid","average"),
 		...)
 }
 \arguments{
@@ -32,6 +33,7 @@
 	\item{xlim}{\emph{x}-limits for the plot.}
 	\item{per.capita}{show values as per 1M population (logical).}
 	\item{cols}{colors to use for plotting.}
+	\item{cdr}{model for case detection rate (CDR) through time.}
 	\item{...}{optional arguments.}
 }
 \description{

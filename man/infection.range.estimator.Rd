@@ -16,6 +16,7 @@
 		bg="transparent",
 		xlim=c(60,366+105),
 		alpha=0.25,
+		cdr=c("sigmoid","average"),
 		...)
 }
 \arguments{
@@ -33,6 +34,7 @@
 	\item{bg}{background color for plots.}
 	\item{xlim}{\emph{x}-limits for the plot.}
 	\item{alpha}{alpha transparency level for transparent elements of the plot.}
+	\item{cdr}{model for case detection rate (CDR) through time.}
 	\item{...}{optional arguments.}
 }
 \description{

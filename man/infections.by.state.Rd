@@ -15,6 +15,7 @@
 		bg="transparent",
 		xlim=c(60,366+105),
 		show.as.percent=FALSE,
+		cdr=c("sigmoid","average"),
 		...)
 }
 \arguments{
@@ -31,6 +32,7 @@
 	\item{bg}{background color for plots.}
 	\item{xlim}{\emph{x}-limits for the plot.}
 	\item{show.as.percent}{show as a percent of all infections (logical).}
+	\item{cdr}{model for case detection rate (CDR) through time.}
 	\item{...}{optional arguments.}
 }
 \description{

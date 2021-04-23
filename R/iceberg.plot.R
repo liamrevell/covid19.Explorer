@@ -9,7 +9,9 @@ iceberg.plot<-function(
 	bg="transparent",
 	xlim=c(60,366+105),
 	alpha=0.5,
+	cdr=c("sigmoid","average"),
 	...){
+	cdr<-cdr[1]
 	if(state!="New York"){
 		Infections<-infection.estimator(
 			state=state,
@@ -20,7 +22,9 @@ iceberg.plot<-function(
 			window=window,
 			smooth=TRUE,
 			span=span,
-			plot=FALSE,...)
+			plot=FALSE,
+			cdr=cdr,
+			...)
 		Cases<-infection.estimator(
 			state=state,
 			data=data,
@@ -47,7 +51,9 @@ iceberg.plot<-function(
 			window=window,
 			smooth=TRUE,
 			span=span,
-			plot=FALSE,...)
+			plot=FALSE,
+			cdr=cdr,
+			...)
 		Cases<-infection.estimator(
 			state="New York City",
 			data=data,

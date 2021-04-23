@@ -16,6 +16,7 @@
 		xlim=c(60,366+105),
 		show.points=FALSE,
 		alpha=c(0.25,0.8),
+		cdr=c("sigmoid","average"),
 		...)
 }
 \arguments{
@@ -33,6 +34,7 @@
 	\item{xlim}{\emph{x}-limits for the plot.}
 	\item{show.points}{show points used in LOESS smoothing (logical).}
 	\item{alpha}{alpha transparency levels for transparent elements of the plot.}
+	\item{cdr}{model for case detection rate (CDR) through time.}
 	\item{...}{optional arguments.}
 }
 \description{

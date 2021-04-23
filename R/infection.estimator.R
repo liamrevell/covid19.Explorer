@@ -33,7 +33,9 @@ infection.estimator<-function(state="Massachusetts",
 	xlim=c(60,366+105),
 	show.points=FALSE,
 	alpha=c(0.25,0.8),
+	cdr=c("sigmoid","average"),
 	...){
+	cdr<-cdr[1]
 	if(length(alpha)==1) alpha<-rep(alpha,2)
 	if(hasArg(getCases)) getCases<-list(...)$getCases
 	else getCases<-FALSE
@@ -43,9 +45,9 @@ infection.estimator<-function(state="Massachusetts",
 		"Sep","Oct","Nov","Dec","Jan","Feb","Mar","Apr","May","Jun")
 	ttime<-max(ms)
 	if(plot=="infection.ratio"){ 
-		show.cr<-TRUE
+		show.cdr<-TRUE
 		plot<-TRUE
-	} else show.cr<-FALSE
+	} else show.cdr<-FALSE
 	if(smooth) if(length(span)==1) span<-c(span,0.3)
 	cols<-make.transparent(c("darkgreen",palette()[c(4,2)]),
 		alpha[2])
@@ -152,53 +154,80 @@ infection.estimator<-function(state="Massachusetts",
 		cr[is.nan(cr)]<-0
 		cr[cr==Inf]<-0
 		cr[cr==-Inf]<-0
-		if(window<7) cr<-moving.average(cr,7)
-		cr[cr>1]<-1
-		cr[cr<0]<-0
-		fm<-try(nls(cr~a/(1+exp(-b*(tt-c))),
-			start=list(a=0.3,b=0.05,c=100),
-			control=list(maxiter=1000)))
-		ntries<-0
-		while(attr(fm,"class")=="try-error"&&ntries<10){
-			ii<-sort(sample(1:T,100))
-			fm<-try(nls(cr[ii]~a/(1+exp(-b*(tt[ii]-c))),
+		if(cdr=="sigmoid"){
+			if(window<7) cr<-moving.average(cr,7)
+			cr[cr>1]<-1
+			cr[cr<0]<-0
+			fm<-try(nls(cr~a/(1+exp(-b*(tt-c))),
 				start=list(a=0.3,b=0.05,c=100),
 				control=list(maxiter=1000)))
-			ntries<-ntries+1
-		}
-		if(attr(fm,"class")=="try-error"){
-			tt<-(T-99):T
-			cr<-rep(mean(cr[(T-99):T]),100)
-			fm<-lm(cr~tt)
-		}
-		if(show.cr){
-			plot(tt,cr,xlim=xlim,bty="n",pch=21,bg="grey",
-				ylab="",xlab="",axes=FALSE)
-			lines(tt,predict(fm),lwd=2,col=cols[2])
-			Args<-list(...)
-			Args$side<-2
-			h<-do.call(axis,Args)
-			Args$side<-1
-			Args$at<-ms
-			Args$labels<-mm
-			v<-do.call(axis,Args)
-			title(ylab="ratio",line=4)
-			plot<-FALSE
-			mtext(paste("b)",state,"daily confirmed cases/estimated infections"),
-				adj=0,line=1,cex=1.2)
-		}
-		if(delay>0){
-			tt<-1:(length(obsCases)-length(estCases))+length(estCases)
-			CR<-predict(fm,newdata=data.frame(tt=tt))
-			if(length(obsCases[tt])!=length(CR)){
+			ntries<-0
+			while(attr(fm,"class")=="try-error"&&ntries<10){
+				ii<-sort(sample(1:T,100))
+				fm<-try(nls(cr[ii]~a/(1+exp(-b*(tt[ii]-c))),
+					start=list(a=0.3,b=0.05,c=100),
+					control=list(maxiter=1000)))
+				ntries<-ntries+1
+			}
+			if(attr(fm,"class")=="try-error"){
 				tt<-(T-99):T
 				cr<-rep(mean(cr[(T-99):T]),100)
 				fm<-lm(cr~tt)
+			}
+			if(show.cdr){
+				plot(tt,cr,xlim=xlim,bty="n",pch=21,bg="grey",
+					ylab="",xlab="",axes=FALSE)
+				lines(tt,predict(fm),lwd=2,col=cols[2])
+				Args<-list(...)
+				Args$side<-2
+				h<-do.call(axis,Args)
+				Args$side<-1
+				Args$at<-ms
+				Args$labels<-mm
+				v<-do.call(axis,Args)
+				title(ylab="ratio",line=4)
+				plot<-FALSE
+				mtext(paste("b)",state,"daily confirmed cases/estimated infections"),
+					adj=0,line=1,cex=1.2)
+			}
+			if(delay>0){
 				tt<-1:(length(obsCases)-length(estCases))+length(estCases)
 				CR<-predict(fm,newdata=data.frame(tt=tt))
+				if(length(obsCases[tt])!=length(CR)){
+					tt<-(T-99):T
+					cr<-rep(mean(cr[(T-99):T]),100)
+					fm<-lm(cr~tt)
+					tt<-1:(length(obsCases)-length(estCases))+length(estCases)
+					CR<-predict(fm,newdata=data.frame(tt=tt))
+				}
+				if(show.cdr) lines(tt,CR,lwd=2,col=cols[2],lty="dotted")
+				estCases<-c(estCases,obsCases[tt]/CR)
 			}
-			if(show.cr) lines(tt,CR,lwd=2,col=cols[2],lty="dotted")
-			estCases<-c(estCases,obsCases[tt]/CR)
+			
+		} else if(cdr=="average"){
+			if(window<7) cr<-moving.average(cr,7)
+			cr[cr>1]<-1
+			cr[cr<0]<-0
+			if(delay>0){
+				CR<-rep(mean(cr[(T-30):T]),length(obsCases))
+				estCases<-c(estCases,obsCases[(T-delay+1):T]/CR[(T-delay+1):T])
+			}
+			if(show.cdr){
+				plot(1:T,cr,xlim=xlim,bty="n",pch=21,bg="grey",
+					ylab="",xlab="",axes=FALSE)
+				lines(1:T,rep(mean(CR),T),lwd=2,col=cols[2])
+				Args<-list(...)
+				Args$side<-2
+				h<-do.call(axis,Args)
+				Args$side<-1
+				Args$at<-ms
+				Args$labels<-mm
+				v<-do.call(axis,Args)
+				title(ylab="ratio",line=4)
+				plot<-FALSE
+				mtext(paste("b)",state,"daily confirmed cases/estimated infections"),
+					adj=0,line=1,cex=1.2)
+			}
 		}
 		tt<-1:length(estCases)
 		fit<-loess(estCases~tt,span=span[1])
@@ -348,7 +377,9 @@ infections.by.state<-function(states=NULL,
 	bg="transparent",
 	xlim=c(60,366+105),
 	show.as.percent=FALSE,
+	cdr=c("sigmoid","average"),
 	...){
+	cdr<-cdr[1]
 	if(length(span)==1) span<-c(span,0.3)
 	ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,31,28,31,30,31))
 	mm<-c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug",
@@ -378,6 +409,7 @@ infections.by.state<-function(states=NULL,
 		window=window,
 		smooth=TRUE,
 		span=span,
+		cdr=cdr,
 		plot=FALSE)
 	foo<-function(state,args){
 		args$state<-state
@@ -568,7 +600,9 @@ compare.infections<-function(states=
 	xlim=c(60,366+105),
 	per.capita=TRUE,
 	cols=NULL,
+	cdr=c("sigmoid","average"),
 	...){
+	cdr<-cdr[1]
 	states<-states[!is.null(states)]
 	ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,31,28,31,30,31))
 	mm<-c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug",
@@ -589,7 +623,7 @@ compare.infections<-function(states=
 					sapply(c("New York City","New York (excluding NYC)"),
 					infection.estimator,cumulative=cumulative,
 					data=data,delay=0,ifr=1,window=window,smooth=smooth,
-					span=span,percent=FALSE,plot=FALSE))
+					span=span,percent=FALSE,plot=FALSE,cdr=cdr))
 				if(per.capita){
 					SS<-age.deaths(data=data,plot=FALSE,return="States")
 					NY<-sum(SS[c("New York","New York City"),"2020"])
@@ -597,7 +631,7 @@ compare.infections<-function(states=
 				}
 			} else dd[[i]]<-infection.estimator(states[i],cumulative=cumulative,
 				data=data,delay=0,ifr=1,window=window,smooth=smooth,
-				span=span,percent=per.capita,plot=FALSE)
+				span=span,percent=per.capita,plot=FALSE,cdr=cdr)
 		}
 		if(per.capita) dd<-lapply(dd,function(x) x*10^4)
 		par(mfrow=c(2,1),mar=c(5.1,5.1,3.1,3.1),bg=bg)
@@ -634,7 +668,7 @@ compare.infections<-function(states=
 					sapply(c("New York City","New York (excluding NYC)"),
 					infection.estimator,cumulative=cumulative,
 					data=data,delay=delay,ifr=ifr,window=window,smooth=smooth,
-					span=span,percent=FALSE,plot=FALSE))
+					span=span,percent=FALSE,plot=FALSE,cdr=cdr))
 				if(per.capita){
 					SS<-age.deaths(data=data,plot=FALSE,return="States")
 					NY<-sum(SS[c("New York","New York City"),"2020"])
@@ -642,7 +676,7 @@ compare.infections<-function(states=
 				}
 			} else ii[[i]]<-infection.estimator(states[i],cumulative=cumulative,
 				data=data,delay=delay,ifr=ifr,window=window,smooth=smooth,
-				span=span,percent=per.capita,plot=FALSE)
+				span=span,percent=per.capita,plot=FALSE,cdr=cdr)
 		}
 		if(per.capita) ii<-lapply(ii,function(x) x*10^4)
 		plot(NA,xlim=xlim,ylim=1.2*c(0,max(sapply(ii,max))),bty="n",

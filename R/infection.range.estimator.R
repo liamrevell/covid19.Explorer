@@ -28,7 +28,9 @@ infection.range.estimator<-function(state="Massachusetts",
 	bg="transparent",
 	xlim=c(60,366+105),
 	alpha=0.25,
+	cdr=c("sigmoid","average"),
 	...){
+	cdr<-cdr[1]
 	ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,31,28,31,30,31))
 	mm<-c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug",
 		"Sep","Oct","Nov","Dec","Jan","Feb","Mar","Apr","May","Jun")
@@ -143,13 +145,13 @@ infection.range.estimator<-function(state="Massachusetts",
 	if(state!="New York"){
 		e.high<-infection.estimator(state,cumulative=cumulative,data=data,delay=delay,
 			ifr=ifr.low,window=window,smooth=smooth,span=span,plot=FALSE,
-			percent=percent)
+			percent=percent,cdr=cdr)
 		e.mid<-infection.estimator(state,cumulative=cumulative,data=data,delay=delay,
 			ifr=ifr.mid,window=window,smooth=smooth,span=span,plot=FALSE,
-			percent=percent)
+			percent=percent,cdr=cdr,)
 		e.low<-infection.estimator(state,cumulative=cumulative,data=data,delay=delay,
 			ifr=ifr.high,window=window,smooth=smooth,span=span,plot=FALSE,
-			percent=percent)
+			percent=percent,cdr=cdr)
 	} else {
 		states<-c("New York (excluding NYC)","New York City")
 		if(percent){ 
@@ -158,22 +160,22 @@ infection.range.estimator<-function(state="Massachusetts",
 		} else pp<-1
 		e.high<-(infection.estimator(states[1],cumulative=cumulative,data=data,delay=delay,
 			ifr=ifr.low,window=window,smooth=smooth,span=span,plot=FALSE,
-			percent=FALSE)+
+			percent=FALSE,cdr=cdr)+
 			infection.estimator(states[2],cumulative=cumulative,data=data,delay=delay,
 			ifr=ifr.low,window=window,smooth=smooth,span=span,plot=FALSE,
-			percent=FALSE))/pp
+			percent=FALSE,cdr=cdr))/pp
 		e.mid<-(infection.estimator(states[1],cumulative=cumulative,data=data,delay=delay,
 			ifr=ifr.mid,window=window,smooth=smooth,span=span,plot=FALSE,
-			percent=FALSE)+
+			percent=FALSE,cdr=cdr)+
 			infection.estimator(states[2],cumulative=cumulative,data=data,delay=delay,
 			ifr=ifr.mid,window=window,smooth=smooth,span=span,plot=FALSE,
-			percent=FALSE))/pp
+			percent=FALSE,cdr=cdr))/pp
 		e.low<-(infection.estimator(states[1],cumulative=cumulative,data=data,delay=delay,
 			ifr=ifr.high,window=window,smooth=smooth,span=span,plot=FALSE,
-			percent=FALSE)+
+			percent=FALSE,cdr=cdr)+
 			infection.estimator(states[2],cumulative=cumulative,data=data,delay=delay,
 			ifr=ifr.high,window=window,smooth=smooth,span=span,plot=FALSE,
-			percent=FALSE))/pp
+			percent=FALSE,cdr=cdr))/pp
 	}
 	plot(NA,xlim=xlim,ylim=c(0,1.2*max(e.high)),
 		bty="n",xlab="",
