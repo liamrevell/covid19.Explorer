@@ -170,8 +170,8 @@ infection.estimator<-function(state="Massachusetts",
 				ntries<-ntries+1
 			}
 			if(attr(fm,"class")=="try-error"){
-				tt<-(T-99):T
-				cr<-rep(mean(cr[(T-99):T]),100)
+				tt<-(T-29):T
+				cr<-rep(mean(cr[(T-29):T]),30)
 				fm<-lm(cr~tt)
 			}
 			if(show.cdr){
