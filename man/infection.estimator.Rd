@@ -13,7 +13,7 @@
 		percent=FALSE,
 		plot=TRUE,
 		bg="transparent",
-		xlim=c(60,366+105),
+		xlim=c(60,366+120),
 		show.points=FALSE,
 		alpha=c(0.25,0.8),
 		cdr=c("sigmoid","average"),

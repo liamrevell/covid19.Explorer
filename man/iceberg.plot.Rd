@@ -11,7 +11,7 @@
 		smooth=TRUE,
 		span=c(0.12,0.3),
 		bg="transparent",
-		xlim=c(60,366+105),
+		xlim=c(60,366+120),
 		alpha=0.5,
 		cdr=c("sigmoid","average"),
 		...)
