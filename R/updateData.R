@@ -36,6 +36,8 @@ updateData<-function(Data,what="all"){
 		Data$CovidDeaths<-CovidDeaths
 	}
 	cat("\n")
+	
+	Data$date<-Sys.Date()
 
 	Data
 }
