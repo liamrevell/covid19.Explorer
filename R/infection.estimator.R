@@ -122,7 +122,7 @@ infection.estimator<-function(state="Massachusetts",
 	}
 	newDeaths<-c(rep(0,21),Cases$new_death)
 	if(plot){
-		ylim<-c(-0.04,1.04)*max(newDeaths)
+		ylim<-c(-0.04,1.04)*max(newDeaths,na.rm=TRUE)
 		par(usr=c(par()$usr[1:2],ylim))
 		for(i in 1:length(newDeaths)){
 			col<-col2rgb(cols[3])/256
@@ -142,7 +142,9 @@ infection.estimator<-function(state="Massachusetts",
 	}
 	newDeaths<-moving.average(newDeaths,window)
 	obsCases<-moving.average(c(rep(0,21),Cases$new_case),window)
-	if(getCases) return(obsCases)
+	if(getCases) return(setNames(obsCases,
+		seq(from=as.Date("1/1/2020",format="%m/%d/%Y"),by=1,
+		length.out=length(obsCases))))
 	if(smooth){
 		estCases<-moving.average(c(rep(0,21),Cases$new_death),
 			window)

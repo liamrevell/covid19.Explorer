@@ -37,6 +37,11 @@ updateData<-function(Data,what="all"){
 	}
 	cat("\n")
 	
+	Data$Cases[is.na(Data$Cases[,"new_death"]),"new_death"]<-0
+	Data$Cases[is.na(Data$Cases[,"new_case"]),"new_case"]<-0
+	Data$Cases[is.na(Data$Cases[,"tot_death"]),"tot_death"]<-0
+	Data$Cases[is.na(Data$Cases[,"tot_cases"]),"tot_cases"]<-0
+	
 	Data$date<-Sys.Date()
 
 	Data

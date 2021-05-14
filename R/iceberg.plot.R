@@ -74,7 +74,9 @@ iceberg.plot<-function(
 	ttime<-max(ms)
 	par(bg=bg)
 	plot(NA,xlim=xlim,xlab="",ylab="",
-		ylim=c(-max(Infections),max(c(0.33*max(Infections),max(Cases)))),
+		ylim=c(-max(Infections,na.rm=TRUE),
+		max(c(0.33*max(Infections,na.rm=TRUE),
+		max(Cases,na.rm=TRUE)))),
 		axes=FALSE,bty="n")
 	Args<-list(...)
 	Args$side<-2
