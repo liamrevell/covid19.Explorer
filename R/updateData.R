@@ -42,7 +42,7 @@ updateData<-function(Data,what="all"){
 	Data$Cases[is.na(Data$Cases[,"tot_death"]),"tot_death"]<-0
 	Data$Cases[is.na(Data$Cases[,"tot_cases"]),"tot_cases"]<-0
 	
-	Data$date<-Sys.Date()
+	Data$date<-max(as.Date(Cases$submission_date,format="%m/%d/%Y"))
 
 	Data
 }
