@@ -13,7 +13,7 @@
 		span=c(0.12,0.3),
 		show.ifr=TRUE,
 		bg="transparent",
-		xlim=c(60,366+120),
+		xlim=c(60,366+135),
 		show.as.percent=FALSE,
 		cdr=c("sigmoid","average"),
 		...)

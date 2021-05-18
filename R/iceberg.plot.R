@@ -7,7 +7,7 @@ iceberg.plot<-function(
 	smooth=TRUE,
 	span=c(0.12,0.3),
 	bg="transparent",
-	xlim=c(60,366+120),
+	xlim=c(60,366+135),
 	alpha=0.5,
 	cdr=c("sigmoid","average"),
 	...){
@@ -68,9 +68,9 @@ iceberg.plot<-function(
 			plot=FALSE)
 	}
 	Infections<-Infections-Cases
-	ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,31,28,31,30,31))
+	ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,31,28,31,30,31,30))
 	mm<-c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug",
-		"Sep","Oct","Nov","Dec","Jan","Feb","Mar","Apr","May","Jun")
+		"Sep","Oct","Nov","Dec","Jan","Feb","Mar","Apr","May","Jun","Jul")
 	ttime<-max(ms)
 	par(bg=bg)
 	plot(NA,xlim=xlim,xlab="",ylab="",

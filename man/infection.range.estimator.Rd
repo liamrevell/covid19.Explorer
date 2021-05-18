@@ -14,7 +14,7 @@
 		percent=FALSE,
 		plot=TRUE,
 		bg="transparent",
-		xlim=c(60,366+120),
+		xlim=c(60,366+135),
 		alpha=0.25,
 		cdr=c("sigmoid","average"),
 		...)
