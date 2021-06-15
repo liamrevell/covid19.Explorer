@@ -9,6 +9,7 @@ age.deaths<-function(
 	date.range=list(),
 	return=NULL,
 	year=2020,
+	bg="transparent",
 	...){
 	plot<-plot[1]
 	if(plot==FALSE) PLOT<-FALSE
@@ -107,7 +108,7 @@ age.deaths<-function(
 		## start plotting
 		if(year==2020) nn<-52
 		if(PLOT){
-			par(mfrow=c(2,1),mar=c(5.1,5.1,3.1,2.1),bg="transparent")
+			par(mfrow=c(2,1),mar=c(5.1,5.1,3.1,2.1),bg=bg)
 			plot(NA,xlim=c(start.day,end.day),bty="n",
 				ylim=c(0,1.2*max(Deaths,na.rm=TRUE)),
 				xlab="",ylab="",

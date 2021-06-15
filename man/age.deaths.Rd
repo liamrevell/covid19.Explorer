@@ -11,6 +11,8 @@
 		data=list(),
 		date.range=list(),
 		return=NULL,
+		year=2020,
+		bg="transparent",
 		...)
 }
 \arguments{
@@ -22,6 +24,8 @@
 	\item{data}{list containing CDC data. If not supplied, function will create this object.}
 	\item{date.range}{date range for the plot.}
 	\item{return}{return specific values to the user.}
+	\item{year}{year to plot.}
+	\item{bg}{background color.}
 	\item{...}{optional arguments.}
 }
 \description{
