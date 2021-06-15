@@ -40,7 +40,7 @@
 	\item{show}{what to plot.}
 	\item{split.groups}{split groups (logical).}
 	\item{show.total.deaths}{show total deaths (logical).}
-	\item{palette to use (\code{"new"} or \code{"original"}).}
+	\item{palette}{palette to use (\code{"new"} or \code{"original"}).}
 	\item{...}{optional arguments.}
 }
 \description{
