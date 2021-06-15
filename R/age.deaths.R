@@ -90,16 +90,25 @@ age.deaths<-function(
 		Normal2021<-rowMeans(Deaths2021[,1:5])
 		Excess<-cbind(Deaths2020[,1:6]-matrix(Normal2020,52,6),
 			(Deaths2021[,1:7]-matrix(Normal2021,52,7))[,7])
+		colnames(Excess)[7]<-"2021"
 		PercentAbove<-Excess/matrix(Normal2020,52,7)*100
-		cumPercentAbove<-apply(Excess,2,cumsum)/matrix(cumsum(Normal2020),52,6)*100
-		ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,31,28,31,30,31,30,31))
-		mm<-c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug",
-			"Sep","Oct","Nov","Dec","Jan '21","Feb","Mar","Apr","Jun","Jul")
-		days<-seq(4,by=7,to=max(ms))
+		cumPercentAbove<-apply(Excess,2,cumsum)/matrix(cumsum(Normal2020),52,7)*100
+		if(year==2020){
+			ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31))
+			mm<-c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug",
+				"Sep","Oct","Nov","Dec","Jan '21")
+			days<-seq(4,by=7,to=max(ms))
+		} else if(year==2021){
+			ms<-cumsum(c(0,31,28,31,30,31,30,31,31,30,31,30,31))
+			mm<-c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug",
+				"Sep","Oct","Nov","Dec","Jan '22")
+			days<-seq(2,by=7,to=max(ms))
+		}
 		## start plotting
+		if(year==2020) nn<-52
 		if(PLOT){
 			par(mfrow=c(2,1),mar=c(5.1,5.1,3.1,2.1),bg="transparent")
-			plot(NA,xlim=c(start.day,end.day),
+			plot(NA,xlim=c(start.day,end.day),bty="n",
 				ylim=c(0,1.2*max(Deaths,na.rm=TRUE)),
 				xlab="",ylab="",
 				axes=FALSE,...)
@@ -107,7 +116,11 @@ age.deaths<-function(
 			Args<-list(...)
 			Args$type<-NULL		
 			Args$side<-2
+			Args$labels<-FALSE
 			h<-do.call(axis,Args)
+			Args$at<-h
+			Args$labels<-relabel.axis(h)
+			do.call(axis,Args)
 			abline(h=h,col=grey(0.75),lwd=1,lty="dotted")
 			Args$side<-1
 			Args$at<-ms
@@ -115,7 +128,7 @@ age.deaths<-function(
 			v<-do.call(axis,Args)
 			for(i in 1:nn){
 				polygon(rep(days[i],4)+c(-2.5,2.5,2.5,-2.5),
-					c(rep(0,2),rep(Deaths[i,"2020"],2)),
+					c(rep(0,2),rep(Deaths[i,as.character(year)],2)),
 					col="grey")
 			}
 			for(i in 1:5){
@@ -125,12 +138,12 @@ age.deaths<-function(
 				col=rgb(1,1,1,1))
 			lines(days,rowMeans(Deaths[,1:5]),lwd=2,
 				col=palette()[2])
-			legend("topleft",c("average weekly deaths\n2015-2019",
+			legend(if(year==2020) "topleft" else "topright",
+				c("average weekly deaths\n2015-2019",
 				"weekly deaths 2015-2019",
-				"weekly deaths 2020"),pch=c(NA,NA,22),pt.bg=c(NA,NA,"grey"),
+				paste("weekly deaths",year)),pch=c(NA,NA,22),pt.bg=c(NA,NA,"grey"),
 				cex=0.7,pt.cex=c(NA,NA,1.2),lwd=c(2,1,NA),col=c(palette()[2],"black",
 				"black"),bg=leg1.bg,box.col="transparent")
-			box(bty="l")
 			mtext(paste("a)",ss,"weekly deaths by age group (or provisional)"),adj=0,line=1,cex=1.2)
 		}
 		if(plot=="raw & excess"){
@@ -142,14 +155,15 @@ age.deaths<-function(
 						1.2*max(cumExcess,na.rm=TRUE)),
 						bty="l",xlab="",ylab="",
 						axes=FALSE,...)
-					#rect(par()$usr[1],par()$usr[3],par()$usr[2],par()$usr[4],
-					#	border="black",col="transparent")
 					title(ylab="Cumulative excess death",line=4)
 					Args<-list(...)
 					Args$type<-NULL
-					
 					Args$side<-2
+					Args$labels<-FALSE
 					h<-do.call(axis,Args)
+					Args$at<-h
+					Args$labels<-relabel.axis(h)
+					do.call(axis,Args)
 					abline(h=h,col=grey(0.75),lwd=1,lty="dotted")
 					Args$side<-1
 					Args$at<-ms
@@ -158,27 +172,30 @@ age.deaths<-function(
 					for(i in 1:5){
 						lines(days,cumExcess[,i])
 					}
-					e2020<-cumExcess[,"2020"]
+					e2020<-cumExcess[,as.character(year)]
 					e2020<-e2020[!is.na(e2020)]
-					lines(days[1:(length(e2020)-5)],
-						e2020[1:(length(e2020)-5)],lwd=5,
+					if(year==2020) ww<-0 else ww<-5
+					lines(days[1:(length(e2020)-ww)],
+						e2020[1:(length(e2020)-ww)],lwd=5,
 						col=rgb(1,1,1,1))
-					lines(days[1:(length(e2020)-5)],
-						e2020[1:(length(e2020)-5)],lwd=3,
+					lines(days[1:(length(e2020)-ww)],
+						e2020[1:(length(e2020)-ww)],lwd=3,
 						col=palette()[4])
-					lines(days[(length(e2020)-5):length(e2020)],
-						e2020[(length(e2020)-5):length(e2020)],lwd=3,
-						col=rgb(1,1,1,1))
-					lines(days[(length(e2020)-5):length(e2020)],
-						e2020[(length(e2020)-5):length(e2020)],lwd=3,
-						col=palette()[4],lty="dotted")
-					legend("topleft",c("cumulative excess deaths\n2015-2019",
-						"cumulative excess deaths 2020",
+					if(ww>0){
+						lines(days[(length(e2020)-ww):length(e2020)],
+							e2020[(length(e2020)-ww):length(e2020)],lwd=3,
+							col=rgb(1,1,1,1))
+						lines(days[(length(e2020)-ww):length(e2020)],
+							e2020[(length(e2020)-ww):length(e2020)],lwd=3,
+							col=palette()[4],lty="dotted")
+					}
+					legend(if(year==2020) "topleft" else "topright",
+						c("cumulative excess deaths\n2015-2019",
+						paste("cumulative excess deaths",year),
 						"data incomplete"),
 						lwd=c(1,2,2),col=c("black",palette()[4],palette()[4]),
 						lty=c("solid","solid","dotted"),cex=0.7,
 						bg=leg2.bg,box.col="transparent")
-					box(bty="l")
 					mtext(paste(
 						"b)",ss,"cumulative deaths above normal (or provisional)"),adj=0,line=1,cex=1.2)
 				}
@@ -189,14 +206,15 @@ age.deaths<-function(
 						1.2*max(Excess,na.rm=TRUE)),
 						bty="l",xlab="",ylab="",
 						axes=FALSE,...)
-					#rect(par()$usr[1],par()$usr[3],par()$usr[2],par()$usr[4],
-					#	border="black",col="transparent")
 					title(ylab="Excess death count",line=4)
 					Args<-list(...)
 					Args$type<-NULL
-					
 					Args$side<-2
+					Args$labels<-FALSE
 					h<-do.call(axis,Args)
+					Args$at<-h
+					Args$labels<-relabel.axis(h)
+					do.call(axis,Args)
 					abline(h=h,col=grey(0.75),lwd=1,lty="dotted")
 					Args$side<-1
 					Args$at<-ms
@@ -204,17 +222,17 @@ age.deaths<-function(
 					v<-do.call(axis,Args)
 					for(i in 1:nn){
 						polygon(rep(days[i],4)+c(-2.5,2.5,2.5,-2.5),
-							c(rep(0,2),rep(Excess[i,"2020"],2)),
+							c(rep(0,2),rep(Excess[i,as.character(year)],2)),
 							col="grey")
 					}
 					for(i in 1:5){
 						lines(days,Excess[,i])
 					}
-					legend("topleft",c("weekly excess deaths 2015-2019",
-						"weekly excess deaths 2020"),pch=c(NA,22),pt.bg=c(NA,"grey"),
+					legend(if(year==2020) "topleft" else "topright",
+						c("weekly excess deaths 2015-2019",
+						paste("weekly excess deaths",year)),pch=c(NA,22),pt.bg=c(NA,"grey"),
 						cex=0.7,pt.cex=c(NA,1.2),lwd=c(1,NA),col=c("grey",
 						"black"),bg=leg2.bg,box.col="transparent")
-					box(bty="l")
 					mtext(paste(
 						"b)",ss,"weekly deaths above normal (or provisional)"),adj=0,line=1,cex=1.2)
 				}
@@ -227,12 +245,9 @@ age.deaths<-function(
 						1.2*max(cumPercentAbove,na.rm=TRUE)),
 						bty="l",xlab="",ylab="",
 						axes=FALSE,...)
-					#rect(par()$usr[1],par()$usr[3],par()$usr[2],par()$usr[4],
-					#	border="black",col="transparent")
 					title(ylab="Cumulative excess death",line=4)
 					Args<-list(...)
 					Args$type<-NULL
-					
 					Args$side<-2
 					h<-do.call(axis,Args)
 					abline(h=h,col=grey(0.75),lwd=1,lty="dotted")
@@ -243,21 +258,25 @@ age.deaths<-function(
 					for(i in 1:5){
 						lines(days,cumPercentAbove[,i])
 					}
-					e2020<-cumPercentAbove[,"2020"]
+					e2020<-cumPercentAbove[,as.character(year)]
 					e2020<-e2020[!is.na(e2020)]
-					lines(days[1:(length(e2020)-5)],
-						e2020[1:(length(e2020)-5)],lwd=5,
+					if(year==2020) ww<-0 else ww<-5
+					lines(days[1:(length(e2020)-ww)],
+						e2020[1:(length(e2020)-ww)],lwd=5,
 						col=rgb(1,1,1,1))
-					lines(days[1:(length(e2020)-5)],
-						e2020[1:(length(e2020)-5)],lwd=3,
+					lines(days[1:(length(e2020)-ww)],
+						e2020[1:(length(e2020)-ww)],lwd=3,
 						col=palette()[4])
-					lines(days[(length(e2020)-5):length(e2020)],
-						e2020[(length(e2020)-5):length(e2020)],lwd=5,
-						col=rgb(1,1,1,1))
-					lines(days[(length(e2020)-5):length(e2020)],
-						e2020[(length(e2020)-5):length(e2020)],lwd=3,
-						col=palette()[4],lty="dotted")
-					legend("topleft",c("cumulative % excess deaths\n2015-2019",
+					if(ww>0){
+						lines(days[(length(e2020)-ww):length(e2020)],
+							e2020[(length(e2020)-ww):length(e2020)],lwd=5,
+							col=rgb(1,1,1,1))
+						lines(days[(length(e2020)-ww):length(e2020)],
+							e2020[(length(e2020)-ww):length(e2020)],lwd=3,
+							col=palette()[4],lty="dotted")
+					}
+					legend(if(year==2020) "topleft" else "topright",
+						c("cumulative % excess deaths\n2015-2019",
 						"cumulative % excess deaths 2020",
 						"data incomplete"),
 						lwd=c(1,2,2),col=c("black",palette()[4],palette()[4]),
@@ -274,12 +293,9 @@ age.deaths<-function(
 						1.2*max(PercentAbove,na.rm=TRUE)),
 						bty="l",xlab="",ylab="",
 						axes=FALSE,...)
-					#rect(par()$usr[1],par()$usr[3],par()$usr[2],par()$usr[4],
-					#	border="black",col="transparent")
 					title(ylab="% death above normal",line=4)
 					Args<-list(...)
-					Args$type<-NULL
-					
+					Args$type<-NULL				
 					Args$side<-2
 					h<-do.call(axis,Args)
 					abline(h=h,col=grey(0.75),lwd=1,lty="dotted")
@@ -289,14 +305,15 @@ age.deaths<-function(
 					v<-do.call(axis,Args)
 					for(i in 1:nn){
 						polygon(rep(days[i],4)+c(-2.5,2.5,2.5,-2.5),
-							c(rep(0,2),rep(PercentAbove[i,"2020"],2)),
+							c(rep(0,2),rep(PercentAbove[i,as.character(year)],2)),
 							col="grey")
 					}
 					for(i in 1:5){
 						lines(days,PercentAbove[,i])
 					}
-					legend("topleft",c("weekly % excess deaths 2015-2019",
-						"weekly % excess deaths 2020"),pch=c(NA,22),pt.bg=c(NA,"grey"),
+					legend(if(year==2020) "topleft" else "topright",
+						c("weekly % excess deaths 2015-2019",
+						paste("weekly % excess deaths",year)),pch=c(NA,22),pt.bg=c(NA,"grey"),
 						cex=0.7,pt.cex=c(NA,1.2),lwd=c(1,NA),col=c("black",
 						"black"),bg=leg2.bg,box.col="transparent")
 					box(bty="l")
