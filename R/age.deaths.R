@@ -8,6 +8,7 @@ age.deaths<-function(
 	data=list(),
 	date.range=list(),
 	return=NULL,
+	year=2020,
 	...){
 	plot<-plot[1]
 	if(plot==FALSE) PLOT<-FALSE
@@ -34,12 +35,14 @@ age.deaths<-function(
 			end.date<-date.range$end.date
 			if(!isDate(end.date)) end.date<-as.Date(end.date,format="%m/%d/%Y")
 		} else end.date<-as.Date("01/02/2021",format="%m/%d/%Y")
-		jj<-which(Counts$Year==2020)
+		jj<-which(Counts$Year==year)
 		start.day<-as.numeric(start.date-as.Date("01/01/2020",format="%m/%d/%Y"))
 		end.day<-as.numeric(end.date-as.Date("01/01/2020",format="%m/%d/%Y"))
-		US.popn<-setNames(c(colSums(States),331002651+States["Puerto Rico",5]),2015:2020)
+		US.popn<-setNames(c(colSums(States),331002651+States["Puerto Rico",5],
+			332722610+States["Puerto Rico",5]),2015:2021)
 		States<-cbind(States,States[,5]/sum(States[,5])*US.popn[6])
-		colnames(States)<-2015:2020
+		States<-cbind(States,States[,5]/sum(States[,5])*US.popn[7])
+		colnames(States)<-2015:2021
 		nyc<-8336817
 		nyc<-nyc*States["New York",]/States["New York",5]
 		States["New York",]<-as.vector(States["New York",])-nyc
@@ -47,12 +50,12 @@ age.deaths<-function(
 		rownames(States)[nrow(States)]<-"New York City"
 		States<-rbind(States,colSums(States))
 		rownames(States)[nrow(States)]<-"United States"
-		Deaths<-matrix(0,53,6,dimnames=list(1:53,2015:2020))
+		Deaths<-matrix(0,53,7,dimnames=list(1:53,2015:2021))
 		ii<-which(Counts$Type=="Predicted (weighted)")
 		Counts<-Counts[ii,]
-		nn<-max(Counts[which(Counts$Year==2020),]$Week)
+		nn<-max(Counts[which(Counts$Year==2021),]$Week)
 		ii<-which(Counts[,1]==state)
-		for(i in 1:6){
+		for(i in 1:7){
 			jj<-which(Counts$Year==2014+i)
 			for(j in 1:length(age.group)){
 				kk<-intersect(intersect(ii,jj),
@@ -63,6 +66,9 @@ age.deaths<-function(
 			}
 		}
 		if(nn<52) Deaths[(nn+1):52,i]<-NA
+		## fix problem with 53 end of weeks in 2020
+		Deaths[,7]<-c(Deaths[53,6],Deaths[1:52,7])
+		Deaths<-Deaths[1:52,]
 		if(nn>52){ 
 			Deaths<-Deaths[1:52,]
 			nn<-52
@@ -75,17 +81,21 @@ age.deaths<-function(
 			Deaths[Deaths==0]<-truncatedMean
 		}
 		if(corrected){
-			Deaths<-Deaths*matrix(as.numeric(States[state,6])/
-				as.numeric(States[state,1:6]),52,6,byrow=TRUE)
-		}
-		Normal<-rowMeans(Deaths[,1:5])
-		Excess<-Deaths-matrix(Normal,52,6)
-		PercentAbove<-Excess/matrix(Normal,52,6)*100
+			Deaths2020<-Deaths*matrix(as.numeric(States[state,6])/
+				as.numeric(States[state,1:7]),52,7,byrow=TRUE)
+			Deaths2021<-Deaths*matrix(as.numeric(States[state,7])/
+				as.numeric(States[state,1:7]),52,7,byrow=TRUE)
+		} else Deaths2020<-Deaths2021<-Deaths
+		Normal2020<-rowMeans(Deaths2020[,1:5])
+		Normal2021<-rowMeans(Deaths2021[,1:5])
+		Excess<-cbind(Deaths2020[,1:6]-matrix(Normal2020,52,6),
+			(Deaths2021[,1:7]-matrix(Normal2021,52,7))[,7])
+		PercentAbove<-Excess/matrix(Normal,52,7)*100
 		cumPercentAbove<-apply(Excess,2,cumsum)/matrix(cumsum(Normal),52,6)*100
-		ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31))
+		ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,31,28,31,30,31,30,31))
 		mm<-c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug",
-			"Sep","Oct","Nov","Dec","Jan (2021)")
-		days<-seq(4,by=7,length.out=52)
+			"Sep","Oct","Nov","Dec","Jan '21","Feb","Mar","Apr","Jun","Jul")
+		days<-seq(4,by=7,to=max(ms))
 		## start plotting
 		if(PLOT){
 			par(mfrow=c(2,1),mar=c(5.1,5.1,3.1,2.1),bg="transparent")

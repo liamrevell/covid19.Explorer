@@ -25,6 +25,7 @@
 		show=c("raw","per.capita","percent","percent.of.covid.deaths"),
 		split.groups=TRUE,
 		show.total.deaths=TRUE,
+		palette="new",
 		...)
 }
 \arguments{
@@ -38,7 +39,8 @@
 	\item{plot}{plotting options.}
 	\item{show}{what to plot.}
 	\item{split.groups}{split groups (logical).}
-	\item{show.total.deaths}{show total deaths (logica).}
+	\item{show.total.deaths}{show total deaths (logical).}
+	\item{palette to use (\code{"new"} or \code{"original"}).}
 	\item{...}{optional arguments.}
 }
 \description{

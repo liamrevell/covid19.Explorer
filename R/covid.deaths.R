@@ -29,6 +29,7 @@ covid.deaths<-function(
 	show=c("raw","per.capita","percent","percent.of.covid.deaths"),
 	split.groups=TRUE,
 	show.total.deaths=TRUE,
+	palette="new",
 	...){
 	plot<-plot[1]
 	show<-show[1]
@@ -160,8 +161,13 @@ covid.deaths<-function(
 
 		plot(NA,xlim=xlim,ylim=ylim,bty="n",axes=FALSE,
 			xlab="",ylab="")
-		cols<-colorRampPalette(colors=brewer.pal("YlOrRd",n=8))(52)
-		cols<-cols[sort(c(seq(1,52,by=5),seq(2,52,by=5)))]
+		if(palette=="new"){
+			cols<-hcl.colors(32,palette="Temps")
+			cols<-cols[sort(c(seq(1,32,by=3),seq(2,32,by=3)))]
+		} else if(palette=="original"){
+			cols<-colorRampPalette(colors=brewer.pal("YlOrRd",n=8))(52)
+			cols<-cols[sort(c(seq(1,52,by=5),seq(2,52,by=5)))]
+		}
 		Cols<-matrix(cols,11,2,byrow=TRUE,
 			dimnames=list(c("Under 1 year","1-4 years","5-14 years",
 			"15-24 years","25-34 years","35-44 years","45-54 years",
