@@ -25,7 +25,7 @@
 		show=c("raw","per.capita","percent","percent.of.covid.deaths"),
 		split.groups=TRUE,
 		show.total.deaths=TRUE,
-		palette="new",
+		palette=c("new","original"),
 		...)
 }
 \arguments{

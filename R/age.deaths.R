@@ -90,8 +90,8 @@ age.deaths<-function(
 		Normal2021<-rowMeans(Deaths2021[,1:5])
 		Excess<-cbind(Deaths2020[,1:6]-matrix(Normal2020,52,6),
 			(Deaths2021[,1:7]-matrix(Normal2021,52,7))[,7])
-		PercentAbove<-Excess/matrix(Normal,52,7)*100
-		cumPercentAbove<-apply(Excess,2,cumsum)/matrix(cumsum(Normal),52,6)*100
+		PercentAbove<-Excess/matrix(Normal2020,52,7)*100
+		cumPercentAbove<-apply(Excess,2,cumsum)/matrix(cumsum(Normal2020),52,6)*100
 		ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,31,28,31,30,31,30,31))
 		mm<-c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug",
 			"Sep","Oct","Nov","Dec","Jan '21","Feb","Mar","Apr","Jun","Jul")

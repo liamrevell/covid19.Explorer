@@ -19,7 +19,7 @@ covid.deaths<-function(
 	"65-74 years",
 	"75-84 years",
 	"85 years and over"),
-	sex=c("Female","Male"),
+	sex=c("Male","Female"),
 	all.causes=TRUE,
 	cumulative=FALSE,
 	data=list(),
