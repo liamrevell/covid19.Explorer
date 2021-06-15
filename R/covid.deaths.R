@@ -29,10 +29,11 @@ covid.deaths<-function(
 	show=c("raw","per.capita","percent","percent.of.covid.deaths"),
 	split.groups=TRUE,
 	show.total.deaths=TRUE,
-	palette="new",
+	palette=c("new","original"),
 	...){
 	plot<-plot[1]
 	show<-show[1]
+	palette<-palette[1]
 	
 	if(!is.null(data$CovidDeaths)) CovidDeaths<-data$CovidDeaths
 	else CovidDeaths<-read.csv("https://liamrevell.github.io/data/Provisional_COVID-19_Death_Counts_by_Sex__Age__and_Week.csv")
@@ -162,8 +163,8 @@ covid.deaths<-function(
 		plot(NA,xlim=xlim,ylim=ylim,bty="n",axes=FALSE,
 			xlab="",ylab="")
 		if(palette=="new"){
-			cols<-hcl.colors(32,palette="Temps")
-			cols<-cols[sort(c(seq(1,32,by=3),seq(2,32,by=3)))]
+			cols<-hcl.colors(22,palette="Temps")
+			## cols<-cols[sort(c(seq(1,32,by=3),seq(2,32,by=3)))]
 		} else if(palette=="original"){
 			cols<-colorRampPalette(colors=brewer.pal("YlOrRd",n=8))(52)
 			cols<-cols[sort(c(seq(1,52,by=5),seq(2,52,by=5)))]
