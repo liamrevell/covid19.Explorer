@@ -625,7 +625,7 @@ compare.infections<-function(states=
 					sapply(c("New York City","New York (excluding NYC)"),
 					infection.estimator,cumulative=cumulative,
 					data=data,delay=0,ifr=1,window=window,smooth=smooth,
-					span=span,percent=FALSE,plot=FALSE,cdr=cdr))
+					span=span,percent=FALSE,plot=FALSE,cdr="average"))
 				if(per.capita){
 					SS<-age.deaths(data=data,plot=FALSE,return="States")
 					NY<-sum(SS[c("New York","New York City"),"2020"])
@@ -633,7 +633,7 @@ compare.infections<-function(states=
 				}
 			} else dd[[i]]<-infection.estimator(states[i],cumulative=cumulative,
 				data=data,delay=0,ifr=1,window=window,smooth=smooth,
-				span=span,percent=per.capita,plot=FALSE,cdr=cdr)
+				span=span,percent=per.capita,plot=FALSE,cdr="average")
 		}
 		if(per.capita) dd<-lapply(dd,function(x) x*10^4)
 		par(mfrow=c(2,1),mar=c(5.1,5.1,3.1,3.1),bg=bg)
