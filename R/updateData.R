@@ -7,14 +7,14 @@ updateData<-function(Data,what="all"){
 			"https://liamrevell.github.io/data/Weekly_Counts_of_Deaths_by_State_and_Select_Causes__2019-2020.csv"))
 		cat("\nUpdating 2020-21 Weekly Counts of Deaths by State and Select Causes from:")
 		cat("\n  https://data.cdc.gov/NCHS/Weekly-Counts-of-Deaths-by-State-and-Select-Causes/muzy-jte6\n")
-		Provis2020<-read.csv(
-			"https://data.cdc.gov/api/views/muzy-jte6/rows.csv?accessType=DOWNLOAD")
+		Provis2020<-try(read.csv(
+			"https://data.cdc.gov/api/views/muzy-jte6/rows.csv?accessType=DOWNLOAD"))
 		if(!inherits(Provis,"try-error")){
 			if(!inherits(Provis2020,"try-error")){
 				ii<-which(Provis$MMWR.Year==2020)
 				Provis<-Provis[-ii,]
 				ii<-which(Provis2020$MMWR.Year==2021)
-				Provis<-rbind(Provis,Provis2020[-ii,])
+				Provis<-rbind(Provis,Provis2020[-ii,colnames(Provis)])
 				Data$Provis<-Provis
 			}
 		}
