@@ -1,6 +1,6 @@
 \name{covid.deaths}
 \alias{covid.deaths}
-\title{Graph 2020 excess deaths by age group and jurisdiction}
+\title{Graph COVID-19 and non COVID-19 deaths by age group}
 \usage{
 	covid.deaths(
 		age.group=c(
@@ -19,7 +19,7 @@
 		all.causes=TRUE,
 		cumulative=FALSE,
 		data=list(),
-		xlim=c(60,366+135),
+		xlim=c(60,366+212),
 		bg="transparent",
 		plot=c("standard","smooth","bar"),
 		show=c("raw","per.capita","percent","percent.of.covid.deaths"),
