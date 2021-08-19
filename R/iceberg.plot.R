@@ -67,10 +67,12 @@ iceberg.plot<-function(
 			getCases=TRUE,
 			plot=FALSE)
 	}
-	Infections<-Infections-Cases
-	ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,31,28,31,30,31,30))
-	mm<-c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug",
-		"Sep","Oct","Nov","Dec","Jan","Feb","Mar","Apr","May","Jun","Jul")
+	Infections<-Infections-Cases	
+	ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,
+		31,28,31,30,31,30,31,31,30,31,30,31))
+	mm<-c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec",
+		"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec",
+		"Jan")
 	ttime<-max(ms)
 	par(bg=bg)
 	plot(NA,xlim=xlim,xlab="",ylab="",
@@ -90,9 +92,10 @@ iceberg.plot<-function(
 	Args$at<-ms
 	Args$labels<-mm
 	v<-do.call(axis,Args)
-	T<-length(Infections)
-	polygon(c(1:T,T,1),c(Cases,0,0),col=palette()[4],border=FALSE)
-	polygon(c(1:T,T,1),c(-Infections,0,0),col=make.transparent(palette()[4],alpha),
+	T<-min(length(Infections),ceiling(par()$usr[2]))
+	S<-max(1,floor(par()$usr[1]))
+	polygon(c(S:T,T,S),c(Cases[S:T],0,0),col=palette()[4],border=FALSE)
+	polygon(c(S:T,T,S),c(-Infections[S:T],0,0),col=make.transparent(palette()[4],alpha),
 		border=FALSE)
 	lines(c(1,length(Infections)),rep(0,2),col=palette()[4])
 	legend("topleft",c(paste("confirmed COVID-19 infections",state),

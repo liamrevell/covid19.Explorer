@@ -31,9 +31,11 @@ infection.range.estimator<-function(state="Massachusetts",
 	cdr=c("sigmoid","average"),
 	...){
 	cdr<-cdr[1]
-	ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,31,28,31,30,31,30))
-	mm<-c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug",
-		"Sep","Oct","Nov","Dec","Jan","Feb","Mar","Apr","May","Jun","Jul")
+	ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,
+		31,28,31,30,31,30,31,31,30,31,30,31))
+	mm<-c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec",
+		"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec",
+		"Jan")
 	ttime<-max(ms)
 	if(length(ifr.low)>1&&length(ifr.low)==length(ifr.high)){
 		IFR<-rbind(ifr.low,ifr.high)
@@ -57,8 +59,10 @@ infection.range.estimator<-function(state="Massachusetts",
 		Args$at<-ms
 		Args$labels<-mm
 		v<-do.call(axis,Args)
-		polygon(c(1:length(ifr.low),length(ifr.high):1),
-			100*c(ifr.low,ifr.high[length(ifr.high):1]),
+		S<-max(1,floor(par()$usr[1]))
+		T<-min(length(ifr.low),ceiling(par()$usr[2]))
+		polygon(c(S:T,T:S),
+			100*c(ifr.low[S:T],ifr.high[T:S]),
 			col=make.transparent(cols[2],alpha),
 			border=FALSE)
 		ifr.mid<-colMeans(rbind(ifr.low,ifr.high))
@@ -196,10 +200,11 @@ infection.range.estimator<-function(state="Massachusetts",
 	Args$at<-ms
 	Args$labels<-mm
 	v<-do.call(axis,Args)
-	T<-length(e.low)
-	polygon(c(1:T,T:1),c(e.low,e.high[T:1]),border=FALSE,
+	S<-max(1,floor(par()$usr[1]))
+	T<-min(length(e.low),ceiling(par()$usr[2]))
+	polygon(c(S:T,T:S),c(e.low[S:T],e.high[T:S]),border=FALSE,
 		col=make.transparent(cols[1],alpha))
-	lines(1:T,e.mid,lty="dotted",lwd=2,col=cols[1])
+	lines(S:T,e.mid[S:T],lty="dotted",lwd=2,col=cols[1])
 	if(cumulative) mtext(paste("b)",state,"estimated cumulative infections"),
 		adj=0,line=1,cex=1.2) else mtext(paste("b)",state,
 		"estimated daily infections"),adj=0,line=1,cex=1.2)

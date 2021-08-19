@@ -40,9 +40,11 @@ infection.estimator<-function(state="Massachusetts",
 	if(hasArg(getCases)) getCases<-list(...)$getCases
 	else getCases<-FALSE
 	if(getCases) plot<-FALSE
-	ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,31,28,31,30,31,30))
-	mm<-c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug",
-		"Sep","Oct","Nov","Dec","Jan","Feb","Mar","Apr","May","Jun","Jul")
+	ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,
+		31,28,31,30,31,30,31,31,30,31,30,31))
+	mm<-c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec",
+		"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec",
+		"Jan")
 	ttime<-max(ms)
 	if(plot=="infection.ratio"){ 
 		show.cdr<-TRUE
@@ -269,17 +271,18 @@ infection.estimator<-function(state="Massachusetts",
 			Args$at<-ms
 			Args$labels<-mm
 			v<-do.call(axis,Args)
-			polygon(c(1:T,T,1),
-				c(estCases[1:T],0,0),
+			S<-max(1,floor(par()$usr[1]))
+			T<-min(length(estCases),ceiling(par()$usr[2]))
+			polygon(c(S:T,T,1),
+				c(estCases[S:T],0,0),
 				border=FALSE,col=cols[1])
-			lines(T:length(estCases),
-				estCases[T:length(estCases)],
-				lty="dotted",lwd=2,col=cols[1])
-			polygon(c(1:length(obsCases),length(obsCases),1),
-				c(obsCases,0,0),
+			T<-min(length(obsCases),ceiling(par()$usr[2]))
+			polygon(c(S:T,T,1),
+				c(obsCases[S:T],0,0),
 				border=FALSE,col=cols[2])
-			polygon(c(1:length(newDeaths),length(newDeaths),1),
-				c(newDeaths,0,0),
+			T<-min(length(newDeaths),ceiling(par()$usr[2]))
+			polygon(c(S:T,T,1),
+				c(newDeaths[S:T],0,0),
 				border=FALSE,col=cols[3])
 			if(show.points){
 				ee<-c(rep(0,21),Cases$new_death)
@@ -329,17 +332,18 @@ infection.estimator<-function(state="Massachusetts",
 			Args$at<-ms
 			Args$labels<-mm
 			v<-do.call(axis,Args)
-			polygon(c(1:T,T,1),
-				c(estCases[1:T],0,0),
+			S<-max(1,floor(par()$usr[1]))
+			T<-min(length(estCases),ceiling(par()$usr[2]))
+			polygon(c(S:T,T,1),
+				c(estCases[S:T],0,0),
 				border=FALSE,col=cols[1])
-			lines(T:length(estCases),
-				estCases[T:length(estCases)],
-				lty="dotted",lwd=2,col=cols[1])
-			polygon(c(1:length(obsCases),length(obsCases),1),
-				c(obsCases,0,0),
+			T<-min(length(obsCases),ceiling(par()$usr[2]))
+			polygon(c(S:T,T,1),
+				c(obsCases[S:T],0,0),
 				border=FALSE,col=cols[2])
-			polygon(c(1:length(newDeaths),length(newDeaths),1),
-				c(newDeaths,0,0),
+			T<-min(length(newDeaths),ceiling(par()$usr[2]))
+			polygon(c(S:T,T,1),
+				c(newDeaths[S:T],0,0),
 				border=FALSE,col=cols[3])
 			if(show.points){
 				ee<-c(rep(0,21),Cases$tot_death)
@@ -383,9 +387,11 @@ infections.by.state<-function(states=NULL,
 	...){
 	cdr<-cdr[1]
 	if(length(span)==1) span<-c(span,0.3)
-	ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,31,28,31,30,31,30))
-	mm<-c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug",
-		"Sep","Oct","Nov","Dec","Jan","Feb","Mar","Apr","May","Jun","Jul")
+	ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,
+		31,28,31,30,31,30,31,31,30,31,30,31))
+	mm<-c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec",
+		"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec",
+		"Jan")
 	ttime<-max(ms)
 	ifr<-make.ifr(ifr,ttime,smooth=smooth,span=span)
 	if(is.null(states)) 
@@ -606,9 +612,11 @@ compare.infections<-function(states=
 	...){
 	cdr<-cdr[1]
 	states<-states[!is.null(states)]
-	ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,31,28,31,30,31,30))
-	mm<-c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug",
-		"Sep","Oct","Nov","Dec","Jan","Feb","Mar","Apr","May","Jun","Jul")
+	ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,
+		31,28,31,30,31,30,31,31,30,31,30,31))
+	mm<-c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec",
+		"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec",
+		"Jan")
 	ttime<-max(ms)
 	denom<-if(per.capita) " / 1M" else ""
 	if(length(states)>0){
