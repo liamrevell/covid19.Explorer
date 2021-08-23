@@ -147,6 +147,14 @@ covid.deaths<-function(
 			
 		qq<-if(show=="per.capita") "/ 1M" else 
 			if(show=="percent"||show=="percent.of.covid.deaths") "%" else ""
+			
+		aa<-age.group
+		if(any(aa=="Under 1 year")) aa[aa=="Under 1 year"]<-"<1 years"
+		if(any(aa=="85 years and over")) aa[aa=="85 years and over"]<-">85 years"
+		aa<-gsub(" years","",aa)
+			
+		rr<-if(split.groups) "" else 
+			paste("(",paste(aa,collapse=", "),")",sep="")
 
 		if(show=="percent.of.covid.deaths"){
 			tmp<-cd
@@ -246,9 +254,9 @@ covid.deaths<-function(
 		
 		if(show.total.deaths){
 			if(cumulative)
-				mtext(paste("a) cumulative COVID-19 deaths",pp),adj=0,line=1,cex=1.2)
+				mtext(paste("a) cumulative COVID-19 deaths",pp,rr),adj=0,line=1,cex=1.2)
 			else
-				mtext(paste("a) weekly COVID-19 deaths",pp),adj=0,line=1,cex=1.2)
+				mtext(paste("a) weekly COVID-19 deaths",pp,rr),adj=0,line=1,cex=1.2)
 		}
 		cd<-tmp
 
@@ -339,9 +347,9 @@ covid.deaths<-function(
 			pp<-if(show=="percent.of.covid.deaths") "as % of all deaths" else pp
 			
 			if(cumulative)
-				mtext(paste("b) cumulative COVID-19 and non-COVID deaths",pp),adj=0,line=1,cex=1.2)
+				mtext(paste("b) cumulative COVID-19 and non-COVID deaths",pp,rr),adj=0,line=1,cex=1.2)
 			else
-				mtext(paste("b) weekly COVID-19 and non-COVID deaths",pp),adj=0,line=1,cex=1.2)
+				mtext(paste("b) weekly COVID-19 and non-COVID deaths",pp,rr),adj=0,line=1,cex=1.2)
 		}
 	}
 	invisible(list(CD=CD,TD=TD))
