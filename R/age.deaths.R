@@ -14,8 +14,8 @@ age.deaths<-function(
 	plot<-plot[1]
 	if(plot==FALSE) PLOT<-FALSE
 	else PLOT<-TRUE
-	pp<-if(all(sapply(age.group,"%in%",c("Under 25 years","25-44 years","45-64 years",
-		"65-74 years","75-84 years","85 years and older")))) ": all ages" else 
+	pp<-if(all(sapply(c("Under 25 years","25-44 years","45-64 years",
+		"65-74 years","75-84 years","85 years and older"),"%in%",age.group))) ": all ages" else 
 		paste(": ",paste(age.group,collapse=", "))
 	pp<-gsub("Under ","<",pp)
 	pp<-gsub("85 years and older",">85",pp)
