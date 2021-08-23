@@ -17,7 +17,6 @@ age.deaths<-function(
 	pp<-if(all(sapply(age.group,"%in%",c("Under 25 years","25-44 years","45-64 years",
 		"65-74 years","75-84 years","85 years and older")))) ": all ages" else 
 		paste(": ",paste(age.group,collapse=", "))
-	pp<-paste(": ",paste(age.group,collapse=", "))
 	pp<-gsub("Under ","<",pp)
 	pp<-gsub("85 years and older",">85",pp)
 	pp<-gsub(" years","",pp)
