@@ -14,6 +14,13 @@ age.deaths<-function(
 	plot<-plot[1]
 	if(plot==FALSE) PLOT<-FALSE
 	else PLOT<-TRUE
+	pp<-if(all(sapply(age.group,"%in%",c("Under 25 years","25-44 years","45-64 years",
+		"65-74 years","75-84 years","85 years and older")))) ": all ages" else 
+		paste(": ",paste(age.group,collapse=", "))
+	pp<-paste(": ",paste(age.group,collapse=", "))
+	pp<-gsub("Under ","<",pp)
+	pp<-gsub("85 years and older",">85",pp)
+	pp<-gsub(" years","",pp)
 	if(length(age.group)>0){
 		leg1.bg<-"transparent" ## colorRampPalette(colors=c("white", "#E8E8E8"))(10)[2]
 		RGB<-col2rgb(leg1.bg)[,1]/255
@@ -145,7 +152,7 @@ age.deaths<-function(
 				paste("weekly deaths",year)),pch=c(NA,NA,22),pt.bg=c(NA,NA,"grey"),
 				cex=0.7,pt.cex=c(NA,NA,1.2),lwd=c(2,1,NA),col=c(palette()[2],"black",
 				"black"),bg=leg1.bg,box.col="transparent")
-			mtext(paste("a)",ss,"weekly deaths by age group (or provisional)"),adj=0,line=1,cex=1.2)
+			mtext(paste("a)",ss,"weekly deaths by age group (or provisional)",pp),adj=0,line=1,cex=1.2)
 		}
 		if(plot=="raw & excess"){
 			if(cumulative){
@@ -198,7 +205,7 @@ age.deaths<-function(
 						lty=c("solid","solid","dotted"),cex=0.7,
 						bg=leg2.bg,box.col="transparent")
 					mtext(paste(
-						"b)",ss,"cumulative deaths above normal (or provisional)"),adj=0,line=1,cex=1.2)
+						"b)",ss,"cumulative deaths above normal (or provisional)",pp),adj=0,line=1,cex=1.2)
 				}
 			} else {
 				if(PLOT){
