@@ -341,6 +341,8 @@ age.deaths<-function(
 			invisible(PercentAbove)
 		} else if(return=="cumPercentAbove"){
 			invisible(cumPercentAbove)
+		} else if(return=="Normal"){
+			if(year==2020) invisible(Normal2020) else if(year==2021) invisible(Normal2021)
 		}
 	}
 }
