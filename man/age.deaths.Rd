@@ -8,6 +8,7 @@
 		plot=c("raw & excess","raw & percent above normal"),
 		cumulative=TRUE,
 		corrected=FALSE,
+		regression=FALSE,
 		data=list(),
 		date.range=list(),
 		return=NULL,
@@ -21,6 +22,7 @@
 	\item{plot}{what to plot.}
 	\item{cumulative}{show cumulative deaths or excess deaths (logical).}
 	\item{corrected}{correct past year deaths to 2020 population (logical).}
+	\item{regression}{use regression to obtain expected value (instead of corrected mean).}
 	\item{data}{list containing CDC data. If not supplied, function will create this object.}
 	\item{date.range}{date range for the plot.}
 	\item{return}{return specific values to the user.}

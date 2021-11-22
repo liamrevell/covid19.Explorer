@@ -1,3 +1,18 @@
+regressExcess<-function(Deaths,return=c("Excess","Expected")){	
+	return<-return[1]
+	Expected<-matrix(NA,52,7,dimnames=list(1:52,2015:2021))
+	for(i in 1:nrow(Deaths)){
+		x<-2015:2019
+		y<-Deaths[i,1:5]
+		fit<-lm(y~x)
+		newdata<-data.frame(x=2015:2021)
+		Expected[i,]<-predict(fit,newdata=newdata)
+	}
+	Excess<-Deaths-Expected
+	if(return=="Excess") return(Excess) 
+	else  if(return=="Expected") return(Expected)
+}
+
 age.deaths<-function(
 	state="Massachusetts",
 	age.group=c("Under 25 years","25-44 years","45-64 years",
@@ -5,6 +20,7 @@ age.deaths<-function(
 	plot=c("raw & excess","raw & percent above normal"),
 	cumulative=TRUE,
 	corrected=FALSE,
+	regression=FALSE,
 	data=list(),
 	date.range=list(),
 	return=NULL,
@@ -93,13 +109,25 @@ age.deaths<-function(
 			Deaths2021<-Deaths*matrix(as.numeric(States[state,7])/
 				as.numeric(States[state,1:7]),52,7,byrow=TRUE)
 		} else Deaths2020<-Deaths2021<-Deaths
-		Normal2020<-rowMeans(Deaths2020[,1:5])
-		Normal2021<-rowMeans(Deaths2021[,1:5])
-		Excess<-cbind(Deaths2020[,1:6]-matrix(Normal2020,52,6),
-			(Deaths2021[,1:7]-matrix(Normal2021,52,7))[,7])
+		if(regression){
+			Normal2020<-Normal2021<-regressExcess(Deaths,return="Expected")
+		} else {
+			Normal2020<-rowMeans(Deaths2020[,1:5])
+			Normal2021<-rowMeans(Deaths2021[,1:5])
+		}
+		if(regression)
+			Excess<-regressExcess(Deaths)
+		else 
+			Excess<-cbind(Deaths2020[,1:6]-matrix(Normal2020,52,6),
+				(Deaths2021[,1:7]-matrix(Normal2021,52,7))[,7])
 		colnames(Excess)[7]<-"2021"
-		PercentAbove<-Excess/matrix(Normal2020,52,7)*100
-		cumPercentAbove<-apply(Excess,2,cumsum)/matrix(cumsum(Normal2020),52,7)*100
+		if(regression){
+			PercentAbove<-Excess/Normal2020*100
+			cumPercentAbove<-apply(Excess,2,cumsum)/apply(Normal2020,2,cumsum)
+		} else {
+			PercentAbove<-Excess/matrix(Normal2020,52,7)*100
+			cumPercentAbove<-apply(Excess,2,cumsum)/matrix(cumsum(Normal2020),52,7)*100
+		}	
 		if(year==2020){
 			ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31))
 			mm<-c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug",
