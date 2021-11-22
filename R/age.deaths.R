@@ -123,7 +123,7 @@ age.deaths<-function(
 		colnames(Excess)[7]<-"2021"
 		if(regression){
 			PercentAbove<-Excess/Normal2020*100
-			cumPercentAbove<-apply(Excess,2,cumsum)/apply(Normal2020,2,cumsum)
+			cumPercentAbove<-apply(Excess,2,cumsum)/apply(Normal2020,2,cumsum)*100
 		} else {
 			PercentAbove<-Excess/matrix(Normal2020,52,7)*100
 			cumPercentAbove<-apply(Excess,2,cumsum)/matrix(cumsum(Normal2020),52,7)*100
