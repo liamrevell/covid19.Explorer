@@ -75,7 +75,7 @@ excess.vs.covid<-function(
 			"confirmed COVID-19 deaths",pp),
 			lwd=c(2,2,NA),col=c(palette()[c(2,7)],NA),bty="n",
 			cex=0.8)
-	clip(0,max(xx),0,1.1*max(c(excess,all.weekly)))
+	clip(0,max(xx),0,1.2*max(c(excess,all.weekly)))
 	grid()
 	obj<-data.frame(Excess.deaths=excess,Confirmed.COVID=all.weekly)
 	invisible(obj)
