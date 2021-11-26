@@ -74,7 +74,7 @@ excess.vs.covid<-function(
 	else
 		legend("topleft",c("excess deaths 2020/21",
 			"confirmed COVID-19 deaths",pp),
-			lwd=c(2,2,NA),col=c(palette()[c(2,7)],NA),bty="n",
+			lwd=c(lwd,lwd,NA),col=c(palette()[c(2,7)],NA),bty="n",
 			cex=0.8)
 	clip(0,max(xx),0,1.2*max(c(excess,all.weekly)))
 	grid()
