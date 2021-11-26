@@ -14,6 +14,7 @@
 	data=list(),
 	xlim=c(60,366+334),
 	bg="transparent",
+	lwd=2,
 	...)
 }
 \arguments{
@@ -22,6 +23,7 @@
 	\item{data}{list containing CDC data. If not supplied, function will create this object.}
 	\item{xlim}{\emph{x} limits for the plot.}
 	\item{bg}{background color of the plot.}
+	\item{lwd}{line width.}
 	\item{...}{optional arguments.}
 }
 \description{

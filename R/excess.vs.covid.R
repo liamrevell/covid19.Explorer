@@ -10,6 +10,7 @@ excess.vs.covid<-function(
 	data=list(),
 	xlim=c(60,366+334),
 	bg="transparent",
+	lwd=2,
 	...){
 	agg<-c("Under 1 year","1-4 years","5-14 years",
 		"15-24 years","25-34 years","35-44 years","45-54 years",
@@ -47,8 +48,8 @@ excess.vs.covid<-function(
 		"Jan")
 	xx<-seq(from=35.5,by=7,length.out=length(excess.cumsum))
 	plot(xx,excess,type="l",bty="n",axes=FALSE,xlab="",ylab="",
-		lwd=2,col=palette()[2],ylim=c(0,1.2*max(c(excess,all.weekly))))
-	lines(xx,all.weekly,col=palette()[7],lwd=2)
+		lwd=lwd,col=palette()[2],ylim=c(0,1.2*max(c(excess,all.weekly))))
+	lines(xx,all.weekly,col=palette()[7],lwd=lwd)
 	Args<-list(...)
 	Args$side<-2
 	Args$labels<-FALSE
