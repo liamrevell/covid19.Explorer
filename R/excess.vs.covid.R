@@ -24,10 +24,10 @@ excess.vs.covid<-function(
 	if(4%in%ii) jj<-c(jj,9)
 	if(5%in%ii) jj<-c(jj,10)
 	if(6%in%ii) jj<-c(jj,11)
-	obj<-covid.deaths(data=Data,plot=FALSE,age.group=agg[jj])
+	obj<-covid.deaths(data=data,plot=FALSE,age.group=agg[jj])
 	all.covid<-sapply(obj$CD,rowSums)
 	all.weekly<-rowSums(all.covid)
-	all.excess<-age.deaths(data=Data,state="United States",return="Excess",
+	all.excess<-age.deaths(data=data,state="United States",return="Excess",
 		regression=TRUE,plot=FALSE,age.group=age.group)
 	excess<-c(all.excess[6:52,"2020"],all.excess[1:52,"2021"])
 	nn<-min(sum(!is.na(excess)),length(all.weekly))
@@ -39,7 +39,7 @@ excess.vs.covid<-function(
 		all.weekly<-all.cumsum
 		excess<-excess.cumsum
 	}
-	par(mar=c(5.1,4.1,3.1,1.1))
+	par(mar=c(5.1,4.1,3.1,1.1),bg=bg)
 	ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,
 		31,28,31,30,31,30,31,31,30,31,30,31))
 	mm<-c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec",
