@@ -1,7 +1,7 @@
-export(age.deaths, compare.infections, covid.deaths, iceberg.plot, infection.estimator, infection.range.estimator, infections.by.state, state.deaths, updateData)
+export(age.deaths, compare.infections, covid.deaths, excess.vs.covid, iceberg.plot, infection.estimator, infection.range.estimator, infections.by.state, state.deaths, updateData)
 
 importFrom(grDevices, col2rgb, colorRampPalette, grey, hcl.colors, palette, rgb)
-importFrom(graphics, abline, axis, box, legend, lines, mtext, par, points, polygon, strwidth, text, title)
+importFrom(graphics, abline, axis, box, clip, grid, legend, lines, mtext, par, points, polygon, strwidth, text, title)
 importFrom(maps, map)
 importFrom(methods, hasArg)
 importFrom(phytools, make.transparent)

@@ -136,10 +136,12 @@ covid.deaths<-function(
 
 		xx<-seq(from=35.5,by=7,length.out=length(td))
 
-		if(show.total.deaths)
-			par(mfrow=c(2,1),mar=c(5.1,5.1,3.1,3.1),bg=bg)
-		else par(mar=c(5.1,5.1,3.1,3.1),bg=bg)
-		
+		if(plot!=FALSE){
+			if(show.total.deaths)
+				par(mfrow=c(2,1),mar=c(5.1,5.1,3.1,3.1),bg=bg)
+			else par(mar=c(5.1,5.1,3.1,3.1),bg=bg)
+		}
+			
 		pp<-if(show=="per.capita") "/ 1M population" else 
 			if(show=="percent") "as % of all deaths" else 
 			if(show=="percent.of.covid.deaths") "as % of COVID deaths" else
@@ -169,9 +171,10 @@ covid.deaths<-function(
 
 		if(split.groups&&plot!="smooth"&&show=="percent.of.covid.deaths")
 			ylim<-c(0,120)
-
-		plot(NA,xlim=xlim,ylim=ylim,bty="n",axes=FALSE,
-			xlab="",ylab="")
+		
+		if(plot!=FALSE)
+			plot(NA,xlim=xlim,ylim=ylim,bty="n",axes=FALSE,
+				xlab="",ylab="")
 		if(palette=="new"){
 			cols<-hcl.colors(22,palette="Temps")
 			## cols<-cols[sort(c(seq(1,32,by=3),seq(2,32,by=3)))]
@@ -234,122 +237,126 @@ covid.deaths<-function(
 				}
 			}
 		}
-		
-		Args<-list(...)
-		Args$side<-2
-		Args$labels<-FALSE
-		if(show=="percent.of.covid.deaths") 
-			Args$at<-seq(0,100,by=20)
-		h<-do.call(axis,Args)
-		Args$at<-h
-		Args$labels<-if(max(cd)>1000000) paste(h/1000000,"M",sep="") else
-			if(max(cd)>1000) paste(h/1000,"k",sep="") else h
-		do.call(axis,Args)
-		abline(h=h,col=grey(0.75),lwd=1,lty="dotted")
-		Args$side<-1
-		Args$at<-ms
-		Args$labels<-mm
-		v<-do.call(axis,Args)
-		title(ylab=if(cumulative) paste("cumulative deaths",qq) else paste("weekly deaths",qq))
-		
-		if(show.total.deaths){
-			if(cumulative)
-				mtext(paste("a) cumulative COVID-19 deaths",pp,rr),adj=0,line=1,cex=1.2)
-			else
-				mtext(paste("a) weekly COVID-19 deaths",pp,rr),adj=0,line=1,cex=1.2)
-		}
-		cd<-tmp
-
-		if(!split.groups){
-			legend(x="topleft","confirmed COVID-19 deaths",
-				pch=15,cex=0.9,
-				col=palette()[2],
-				pt.cex=1.5,bty="n",xpd=TRUE,
-				xjust=0.5,yjust=1)
-		} else {
-			BG<-if(show=="percent.of.covid.deaths") 
-				make.transparent("white",0.75) else "transparent"
-			if(ncol(Cols)==2){
-				i<-1
-				xy<-legend(x="topleft",rep("",nrow(Cols)+1),
-					pch=15,cex=0.8,
-					col=c("transparent",Cols[,i]),pt.cex=1.5,xpd=TRUE,
-					xjust=0.5,yjust=1,bg="transparent",box.col="transparent")
-				text(xy$text$x[1]+1,xy$text$y[1],
-					if(colnames(Cols)[i]=="Female") "F" else "M",cex=0.8,pos=2)
-			} else i<-0
-			xy<-legend(x=if(i==1) xy$rect$left+strwidth("W") else "topleft",
-				y=if(i==1) xy$rect$top else NULL,
-				legend=c("",rownames(Cols)),
-				pch=15,cex=0.8,
-				col=c("transparent",Cols[,i+1]),
-				pt.cex=1.5,bg=BG,box.col="transparent")
-			text(xy$text$x[1]+1,xy$text$y[1],if(colnames(Cols)[i+1]=="Female") "F" else "M",
-				cex=0.8,pos=2)
-			if(ncol(Cols)==2){
-				i<-1
-				xy<-legend(x="topleft",rep("",nrow(Cols)+1),
-					pch=15,cex=0.8,
-					col=c("transparent",Cols[,i]),pt.cex=1.5,xpd=TRUE,
-					xjust=0.5,yjust=1,bg="transparent",box.col="transparent")
-				text(xy$text$x[1]+1,xy$text$y[1],
-					if(colnames(Cols)[i]=="Female") "F" else "M",cex=0.8,pos=2)
-			}
-		}
-		if(show.total.deaths){
-			plot(NA,xlim=xlim,ylim=c(0,1.2*max(td+cd)),bty="n",axes=FALSE,
-				xlab="",ylab="")
-				
-			if(plot=="standard"){
-				polygon(x=c(xx,max(xx),min(xx)),y=c(td,0,0),border=FALSE,
-					col=palette()[4])
-				polygon(x=c(xx,xx[length(xx):1]),y=c(td+cd,td[length(td):1]),
-					border=FALSE,col=palette()[2])	
-			} else if(plot=="bar"){
-				for(i in 1:length(td)) polygon(xx[i]+c(-3.25,3.25,3.25,-3.25),
-					c(0,0,td[i],td[i]),border=FALSE,col=palette()[4])
-				for(i in 1:length(cd)) polygon(xx[i]+c(-3.25,3.25,3.25,-3.25),
-					c(0,0,cd[i],cd[i])+td[i],border=FALSE,col=palette()[2])
-			} else if(plot=="smooth"){
-				if(show!="percent.of.covid.deaths")
-					lines(xx,cds,lwd=2,lty="dashed",col=palette()[2])
-				else
-					lines(xx,cd,lwd=2,lty="dashed",col=palette()[2])
-				tds<-predict(loess(td~xx,span=0.1))
-				lines(xx,tds,lwd=2,lty="dashed",col=palette()[4])
-			}
-
+		if(plot!=FALSE){
 			Args<-list(...)
 			Args$side<-2
 			Args$labels<-FALSE
-			if(show=="percent"||show=="percent.of.covid.deaths") 
+			if(show=="percent.of.covid.deaths") 
 				Args$at<-seq(0,100,by=20)
 			h<-do.call(axis,Args)
 			Args$at<-h
-			Args$labels<-if(max(td+cd)>1000000) paste(h/1000000,"M",sep="") else
-				if(max(td+cd)>1000) paste(h/1000,"k",sep="") else h
+			Args$labels<-if(max(cd)>1000000) paste(h/1000000,"M",sep="") else
+				if(max(cd)>1000) paste(h/1000,"k",sep="") else h
 			do.call(axis,Args)
 			abline(h=h,col=grey(0.75),lwd=1,lty="dotted")
 			Args$side<-1
 			Args$at<-ms
 			Args$labels<-mm
 			v<-do.call(axis,Args)
-
-			legend(x="topleft",c("non COVID-19 deaths",
-				"confirmed COVID-19 deaths"),pch=15,cex=0.9,
-				col=palette()[c(4,2)],
-				pt.cex=1.5,bty="n",xpd=TRUE,
-				xjust=0.5,yjust=1)
+			title(ylab=if(cumulative) paste("cumulative deaths",qq) else paste("weekly deaths",qq))
+		
+			if(show.total.deaths){
+				if(cumulative)
+					mtext(paste("a) cumulative COVID-19 deaths",pp,rr),adj=0,line=1,cex=1.2)
+				else
+					mtext(paste("a) weekly COVID-19 deaths",pp,rr),adj=0,line=1,cex=1.2)
+			}
+		}
+		cd<-tmp
+		if(plot!=FALSE){
+			if(!split.groups){
+				legend(x="topleft","confirmed COVID-19 deaths",
+					pch=15,cex=0.9,
+					col=palette()[2],
+					pt.cex=1.5,bty="n",xpd=TRUE,
+					xjust=0.5,yjust=1)
+			} else {
+				BG<-if(show=="percent.of.covid.deaths") 
+					make.transparent("white",0.75) else "transparent"
+				if(ncol(Cols)==2){
+					i<-1
+					xy<-legend(x="topleft",rep("",nrow(Cols)+1),
+						pch=15,cex=0.8,
+						col=c("transparent",Cols[,i]),pt.cex=1.5,xpd=TRUE,
+						xjust=0.5,yjust=1,bg="transparent",box.col="transparent")
+					text(xy$text$x[1]+1,xy$text$y[1],
+						if(colnames(Cols)[i]=="Female") "F" else "M",cex=0.8,pos=2)
+				} else i<-0
+				xy<-legend(x=if(i==1) xy$rect$left+strwidth("W") else "topleft",
+					y=if(i==1) xy$rect$top else NULL,
+					legend=c("",rownames(Cols)),
+					pch=15,cex=0.8,
+					col=c("transparent",Cols[,i+1]),
+					pt.cex=1.5,bg=BG,box.col="transparent")
+				text(xy$text$x[1]+1,xy$text$y[1],if(colnames(Cols)[i+1]=="Female") "F" else "M",
+					cex=0.8,pos=2)
+				if(ncol(Cols)==2){
+					i<-1
+					xy<-legend(x="topleft",rep("",nrow(Cols)+1),
+						pch=15,cex=0.8,
+						col=c("transparent",Cols[,i]),pt.cex=1.5,xpd=TRUE,
+						xjust=0.5,yjust=1,bg="transparent",box.col="transparent")
+					text(xy$text$x[1]+1,xy$text$y[1],
+						if(colnames(Cols)[i]=="Female") "F" else "M",cex=0.8,pos=2)
+				}
+			}
+		}
+		if(show.total.deaths){
+			if(plot!=FALSE){
+				plot(NA,xlim=xlim,ylim=c(0,1.2*max(td+cd)),bty="n",axes=FALSE,
+					xlab="",ylab="")
 				
-			title(ylab=if(cumulative) paste("cumulative deaths",qq) else 
-				paste("weekly deaths",qq))
+				if(plot=="standard"){
+					polygon(x=c(xx,max(xx),min(xx)),y=c(td,0,0),border=FALSE,
+						col=palette()[4])
+					polygon(x=c(xx,xx[length(xx):1]),y=c(td+cd,td[length(td):1]),
+						border=FALSE,col=palette()[2])	
+				} else if(plot=="bar"){
+					for(i in 1:length(td)) polygon(xx[i]+c(-3.25,3.25,3.25,-3.25),
+						c(0,0,td[i],td[i]),border=FALSE,col=palette()[4])
+					for(i in 1:length(cd)) polygon(xx[i]+c(-3.25,3.25,3.25,-3.25),
+						c(0,0,cd[i],cd[i])+td[i],border=FALSE,col=palette()[2])
+				} else if(plot=="smooth"){
+					if(show!="percent.of.covid.deaths")
+						lines(xx,cds,lwd=2,lty="dashed",col=palette()[2])
+					else
+						lines(xx,cd,lwd=2,lty="dashed",col=palette()[2])
+					tds<-predict(loess(td~xx,span=0.1))
+					lines(xx,tds,lwd=2,lty="dashed",col=palette()[4])
+				}
 
-			pp<-if(show=="percent.of.covid.deaths") "as % of all deaths" else pp
+				Args<-list(...)
+				Args$side<-2
+				Args$labels<-FALSE
+				if(show=="percent"||show=="percent.of.covid.deaths") 
+					Args$at<-seq(0,100,by=20)
+				h<-do.call(axis,Args)
+				Args$at<-h
+				Args$labels<-if(max(td+cd)>1000000) paste(h/1000000,"M",sep="") else
+					if(max(td+cd)>1000) paste(h/1000,"k",sep="") else h
+				do.call(axis,Args)
+				abline(h=h,col=grey(0.75),lwd=1,lty="dotted")
+				Args$side<-1
+				Args$at<-ms
+				Args$labels<-mm
+				v<-do.call(axis,Args)
+
+				legend(x="topleft",c("non COVID-19 deaths",
+					"confirmed COVID-19 deaths"),pch=15,cex=0.9,
+					col=palette()[c(4,2)],
+					pt.cex=1.5,bty="n",xpd=TRUE,
+					xjust=0.5,yjust=1)
+				
+				title(ylab=if(cumulative) paste("cumulative deaths",qq) else 
+					paste("weekly deaths",qq))
+
+				pp<-if(show=="percent.of.covid.deaths") "as % of all deaths" else pp
 			
-			if(cumulative)
-				mtext(paste("b) cumulative COVID-19 and non-COVID deaths",pp,rr),adj=0,line=1,cex=1.2)
-			else
-				mtext(paste("b) weekly COVID-19 and non-COVID deaths",pp,rr),adj=0,line=1,cex=1.2)
+				if(cumulative)
+					mtext(paste("b) cumulative COVID-19 and non-COVID deaths",pp,rr),adj=0,line=1,cex=1.2)
+				else
+					mtext(paste("b) weekly COVID-19 and non-COVID deaths",pp,rr),adj=0,line=1,cex=1.2)
+			}
 		}
 	}
 	invisible(list(CD=CD,TD=TD))
