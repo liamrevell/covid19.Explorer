@@ -143,8 +143,8 @@ covid.deaths<-function(
 
 		if(plot!=FALSE){
 			if(show.total.deaths)
-				par(mfrow=c(2,1),mar=c(5.1,5.1,3.1,3.1),bg=bg)
-			else par(mar=c(5.1,5.1,3.1,3.1),bg=bg)
+				par(mfrow=c(2,1),mar=c(5.1,5.1,3.1,2.1),bg=bg)
+			else par(mar=c(5.1,5.1,3.1,2.1),bg=bg)
 		}
 			
 		pp<-if(show=="per.capita") "/ 1M population" else 
