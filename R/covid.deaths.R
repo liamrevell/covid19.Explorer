@@ -23,7 +23,7 @@ covid.deaths<-function(
 	all.causes=TRUE,
 	cumulative=FALSE,
 	data=list(),
-	xlim=c(60,366+334),
+	xlim=c(60,366+365),
 	bg="transparent",
 	plot=c("standard","smooth","bar"),
 	show=c("raw","per.capita","percent","percent.of.covid.deaths"),
@@ -31,6 +31,11 @@ covid.deaths<-function(
 	show.total.deaths=TRUE,
 	palette=c("new","original"),
 	...){
+	if(hasArg(ylim)){ 
+		ylim<-list(...)$ylim
+		y.lim<-ylim
+	} else ylim<-NULL
+	
 	plot<-plot[1]
 	show<-show[1]
 	palette<-palette[1]
@@ -166,14 +171,16 @@ covid.deaths<-function(
 			} else cd<-cd/max(cd)*100
 		} else tmp<-cd
 		
-		ylim<-if(split.groups&&plot=="smooth")
-			c(0,max(sapply(CD,max))) else c(0,1.2*max(cd))
-
-		if(split.groups&&plot!="smooth"&&show=="percent.of.covid.deaths")
-			ylim<-c(0,120)
+		if(is.null(ylim)){
+			y.lim<-if(split.groups&&plot=="smooth")
+				c(0,max(sapply(CD,max))) else c(0,1.2*max(cd))
+	
+			if(split.groups&&plot!="smooth"&&show=="percent.of.covid.deaths")
+				y.lim<-c(0,120)
+		}
 		
 		if(plot!=FALSE)
-			plot(NA,xlim=xlim,ylim=ylim,bty="n",axes=FALSE,
+			plot(NA,xlim=xlim,ylim=y.lim,bty="n",axes=FALSE,
 				xlab="",ylab="")
 		if(palette=="new"){
 			cols<-hcl.colors(22,palette="Temps")
@@ -303,7 +310,9 @@ covid.deaths<-function(
 		}
 		if(show.total.deaths){
 			if(plot!=FALSE){
-				plot(NA,xlim=xlim,ylim=c(0,1.2*max(td+cd)),bty="n",axes=FALSE,
+				if(is.null(ylim)) y.lim<-c(0,1.2*max(td+cd))
+			
+				plot(NA,xlim=xlim,ylim=y.lim,bty="n",axes=FALSE,
 					xlab="",ylab="")
 				
 				if(plot=="standard"){
