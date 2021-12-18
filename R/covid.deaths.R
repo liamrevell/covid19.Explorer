@@ -252,8 +252,7 @@ covid.deaths<-function(
 				Args$at<-seq(0,100,by=20)
 			h<-do.call(axis,Args)
 			Args$at<-h
-			Args$labels<-if(max(cd)>1000000) paste(h/1000000,"M",sep="") else
-				if(max(cd)>1000) paste(h/1000,"k",sep="") else h
+			Args$labels<-relabel.axis(h)
 			do.call(axis,Args)
 			abline(h=h,col=grey(0.75),lwd=1,lty="dotted")
 			Args$side<-1
@@ -341,8 +340,7 @@ covid.deaths<-function(
 					Args$at<-seq(0,100,by=20)
 				h<-do.call(axis,Args)
 				Args$at<-h
-				Args$labels<-if(max(td+cd)>1000000) paste(h/1000000,"M",sep="") else
-					if(max(td+cd)>1000) paste(h/1000,"k",sep="") else h
+				Args$labels<-relabel.axis(h)
 				do.call(axis,Args)
 				abline(h=h,col=grey(0.75),lwd=1,lty="dotted")
 				Args$side<-1

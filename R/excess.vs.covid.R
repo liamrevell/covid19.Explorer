@@ -56,8 +56,7 @@ excess.vs.covid<-function(
 	Args$labels<-FALSE
 	h<-do.call(axis,Args)
 	Args$at<-h
-	Args$labels<-if(max(excess)>1000000) paste(h/1000000,"M",sep="") else
-		if(max(excess)>1000) paste(h/1000,"k",sep="") else h
+	Args$labels<-relabel.axis(h)
 	do.call(axis,Args)
 	Args$side<-1
 	Args$at<-ms
