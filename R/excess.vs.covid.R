@@ -8,7 +8,7 @@ excess.vs.covid<-function(
 	"85 years and older"),
 	cumulative=FALSE,
 	data=list(),
-	xlim=c(60,366+334),
+	xlim=c(60,366+365),
 	bg="transparent",
 	lwd=2,
 	...){
@@ -48,7 +48,8 @@ excess.vs.covid<-function(
 		"Jan")
 	xx<-seq(from=35.5,by=7,length.out=length(excess.cumsum))
 	plot(xx,excess,type="l",bty="n",axes=FALSE,xlab="",ylab="",
-		lwd=lwd,col=palette()[2],ylim=c(0,1.2*max(c(excess,all.weekly))))
+		lwd=lwd,col=palette()[2],ylim=c(0,1.2*max(c(excess,all.weekly))),
+		xlim=xlim)
 	lines(xx,all.weekly,col=palette()[7],lwd=lwd)
 	Args<-list(...)
 	Args$side<-2
@@ -76,8 +77,8 @@ excess.vs.covid<-function(
 			"confirmed COVID-19 deaths",pp),
 			lwd=c(lwd,lwd,NA),col=c(palette()[c(2,7)],NA),bty="n",
 			cex=0.8)
+	abline(h=h,col=grey(0.75),lwd=1,lty="dotted")
 	clip(0,max(xx),0,1.2*max(c(excess,all.weekly)))
-	grid()
 	obj<-data.frame(Excess.deaths=excess,Confirmed.COVID=all.weekly)
 	invisible(obj)
 }
