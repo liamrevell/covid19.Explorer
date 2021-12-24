@@ -40,6 +40,9 @@ infection.estimator<-function(state="Massachusetts",
 	if(hasArg(getCases)) getCases<-list(...)$getCases
 	else getCases<-FALSE
 	if(getCases) plot<-FALSE
+	if(hasArg(getDeaths)) getDeaths<-list(...)$getDeaths
+	else getDeaths<-FALSE
+	if(getDeaths) plot<-FALSE
 	ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,
 		31,28,31,30,31,30,31,31,30,31,30,31))
 	mm<-c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec",
@@ -147,6 +150,9 @@ infection.estimator<-function(state="Massachusetts",
 	if(getCases) return(setNames(obsCases,
 		seq(from=as.Date("1/1/2020",format="%m/%d/%Y"),by=1,
 		length.out=length(obsCases))))
+	if(getDeaths) return(setNames(newDeaths,
+		seq(from=as.Date("1/1/2020",format="%m/%d/%Y"),by=1,
+		length.out=length(newDeaths))))
 	if(smooth){
 		estCases<-moving.average(c(rep(0,21),Cases$new_death),
 			window)

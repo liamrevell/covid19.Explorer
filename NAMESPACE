@@ -1,4 +1,4 @@
-export(age.deaths, compare.infections, covid.deaths, excess.vs.covid, iceberg.plot, infection.estimator, infection.range.estimator, infections.by.state, state.deaths, updateData)
+export(age.deaths, compare.infections, covid.deaths, excess.vs.covid, iceberg.plot, infection.estimator, infection.range.estimator, infections.by.state, just.cases, state.deaths, updateData)
 
 S3method(print, covid.data)
 
