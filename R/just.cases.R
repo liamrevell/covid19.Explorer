@@ -100,10 +100,10 @@ just.cases<-function(states="Massachusetts",
 	legend(x="topleft",states,lwd=2,col=cols,
 		bty="n",cex=0.9,xpd=TRUE,xjust=0.5,yjust=1)
 	if(cumulative){ 
-		mtext(paste("a) cumulative confirmed SARS-CoV-2 cases",denom,sep=""),
+		mtext(paste("a) cumulative confirmed SARS-CoV-2 infections",denom,sep=""),
 			adj=0,line=1,cex=1.2)
 	} else {
-		mtext(paste("a) daily confirmed SARS-CoV-2 cases",denom,sep=""),
+		mtext(paste("a) daily confirmed SARS-CoV-2 infections",denom,sep=""),
 			adj=0,line=1,cex=1.2)
 	}
 		
