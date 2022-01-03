@@ -1,10 +1,21 @@
 ## https://data.cdc.gov/Case-Surveillance/United-States-COVID-19-Cases-and-Deaths-by-State-o/9mfq-cb36
 
 moving.average<-function(x,window=7){
-	xx<-c(rep(0,floor(window/2)),x,rep(x[length(x)],
-		ceiling(window/2)))
-	ma<-rep(NA,length(x))
-	for(i in 1:length(x)) ma[i]<-mean(xx[0:(window-1)+i])
+	ma<-vector(length=length(x))
+	if(window==1) ma<-x
+	else {
+		if(window%%2==1)
+			ii<-jj<-((-window+1)/2):((window-1)/2)
+		else {
+			ii<-((-window)/2):((window-2)/2)
+			jj<-((-window+2)/2):((window)/2)
+		}
+		xx<-c(rep(NA,window),x,rep(NA,window))
+		for(i in 1:length(x)){
+			ma[i]<-(mean(xx[ii+i+window],na.rm=TRUE)+
+				mean(xx[jj+i+window],na.rm=TRUE))/2
+		}
+	}
 	ma
 }
 
