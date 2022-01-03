@@ -59,8 +59,10 @@ just.cases<-function(states="Massachusetts",
 		maxDeaths<-max(sapply(Deaths,max))
 		denom<-if(per.capita) "/1M" else ""
 		ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,
+			31,28,31,30,31,30,31,31,30,31,30,31,
 			31,28,31,30,31,30,31,31,30,31,30,31))
 		mm<-c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec",
+			"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec",
 			"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec",
 			"Jan")
 		par(mfrow=c(2,1),mar=c(5.1,5.1,3.1,3.1),bg=bg)
