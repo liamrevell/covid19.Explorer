@@ -6,7 +6,9 @@ just.cases<-function(states="Massachusetts",
 	xlim=c(60,366+365),
 	per.capita=FALSE,
 	cols=NULL,
+	show=c("both","cases","deaths"),
 	...){
+	show<-show[1]
 	if(length(states)>0){
 		ss<-states
 		if(cumulative) window<-1
@@ -65,64 +67,71 @@ just.cases<-function(states="Massachusetts",
 			"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec",
 			"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec",
 			"Jan")
-		par(mfrow=c(2,1),mar=c(5.1,5.1,3.1,3.1),bg=bg)
-		plot(NA,xlim=xlim,ylim=1.25*c(0,maxCases),bty="n",ylab="",xlab="",axes=FALSE)
-		if(cumulative){ 
-			title(ylab=paste("cumulative cases",denom,sep=""),line=4) 
-		} else {
-			title(ylab=paste("daily cases",denom,sep=""),line=4)
-		}
+		mfrow<-if(show=="both") c(2,1) else c(1,1)
+		par(mfrow=mfrow,mar=c(5.1,5.1,3.1,3.1),bg=bg)
 		Args<-list(...)
-		Args$side<-1
-		Args$at<-ms
-		Args$labels<-mm
-		do.call(axis,Args)
-		Args$side<-2
-		Args$labels<-FALSE
-		Args$at<-NULL
-		h<-do.call(axis,Args)
-		Args$at<-h
-		Args$labels<-relabel.axis(h)
-		abline(h=h,col=grey(0.75),lwd=1,lty="dotted")
-		do.call(axis,Args)
-		nulo<-mapply(lines,Cases,col=cols,MoreArgs=list(lwd=2))
-		legend(x="topleft",states,lwd=2,col=cols,
-			bty="n",cex=0.9,xpd=TRUE,xjust=0.5,yjust=1)
-		if(cumulative){ 
-			mtext(paste("a) cumulative confirmed SARS-CoV-2 infections",denom,sep=""),
-				adj=0,line=1,cex=1.2)
-		} else {
-			mtext(paste("a) daily confirmed SARS-CoV-2 infections",denom,sep=""),
-				adj=0,line=1,cex=1.2)
+		if(show%in%c("both","cases")){
+			plot(NA,xlim=xlim,ylim=1.25*c(0,maxCases),bty="n",ylab="",xlab="",axes=FALSE)
+			if(cumulative){ 
+				title(ylab=paste("cumulative cases",denom,sep=""),line=4) 
+			} else {
+				title(ylab=paste("daily cases",denom,sep=""),line=4)
+			}
+			Args$side<-1
+			Args$at<-ms
+			Args$labels<-mm
+			do.call(axis,Args)
+			Args$side<-2
+			Args$labels<-FALSE
+			Args$at<-NULL
+			h<-do.call(axis,Args)
+			Args$at<-h
+			Args$labels<-relabel.axis(h)
+			abline(h=h,col=grey(0.75),lwd=1,lty="dotted")
+			do.call(axis,Args)
+			nulo<-mapply(lines,Cases,col=cols,MoreArgs=list(lwd=2))
+			legend(x="topleft",states,lwd=2,col=cols,
+				bty="n",cex=0.9,xpd=TRUE,xjust=0.5,yjust=1)
+			MTEXT<-if(show=="both") "a) " else ""
+			if(cumulative){ 
+				mtext(paste(MTEXT,"cumulative confirmed SARS-CoV-2 infections",denom,sep=""),
+					adj=0,line=1,cex=1.2)
+			} else {
+				mtext(paste(MTEXT,"daily confirmed SARS-CoV-2 infections",denom,sep=""),
+					adj=0,line=1,cex=1.2)
+			}
 		}
-		plot(NA,xlim=xlim,ylim=1.25*c(0,maxDeaths),bty="n",ylab="",xlab="",axes=FALSE)
-		if(cumulative){
-			title(ylab=paste("cumulative deaths",denom,
-				sep=""),line=4) 
-		} else { 
-			title(ylab=paste("daily deaths",denom,sep=""),line=4)
-		}
-		Args$side<-1
-		Args$at<-ms
-		Args$labels<-mm
-		do.call(axis,Args)
-		Args$side<-2
-		Args$labels<-FALSE
-		Args$at<-NULL
-		h<-do.call(axis,Args)
-		Args$at<-h
-		Args$labels<-relabel.axis(h)
-		abline(h=h,col=grey(0.75),lwd=1,lty="dotted")
-		do.call(axis,Args)
-		nulo<-mapply(lines,Deaths,col=cols,MoreArgs=list(lwd=2))
-		legend(x="topleft",states,lwd=2,col=cols,
-			bty="n",cex=0.9,xpd=TRUE,xjust=0.5,yjust=1)
-		if(cumulative){
-			mtext(paste("b) cumulative COVID-19 deaths",denom,sep=""),adj=0,
-				line=1,cex=1.2)
-		} else {
-			mtext(paste("b) daily confirmed COVID-19 deaths",denom,sep=""),adj=0,
-				line=1,cex=1.2)
+		if(show%in%c("both","deaths")){
+			plot(NA,xlim=xlim,ylim=1.25*c(0,maxDeaths),bty="n",ylab="",xlab="",axes=FALSE)
+			if(cumulative){
+				title(ylab=paste("cumulative deaths",denom,
+					sep=""),line=4) 
+			} else { 
+				title(ylab=paste("daily deaths",denom,sep=""),line=4)
+			}
+			Args$side<-1
+			Args$at<-ms
+			Args$labels<-mm
+			do.call(axis,Args)
+			Args$side<-2
+			Args$labels<-FALSE
+			Args$at<-NULL
+			h<-do.call(axis,Args)
+			Args$at<-h
+			Args$labels<-relabel.axis(h)
+			abline(h=h,col=grey(0.75),lwd=1,lty="dotted")
+			do.call(axis,Args)
+			nulo<-mapply(lines,Deaths,col=cols,MoreArgs=list(lwd=2))
+			legend(x="topleft",states,lwd=2,col=cols,
+				bty="n",cex=0.9,xpd=TRUE,xjust=0.5,yjust=1)
+			MTEXT<-if(show=="both") "b) " else ""
+			if(cumulative){
+				mtext(paste(MTEXT,"cumulative COVID-19 deaths",denom,sep=""),adj=0,
+					line=1,cex=1.2)
+			} else {
+				mtext(paste(MTEXT,"daily confirmed COVID-19 deaths",denom,sep=""),adj=0,
+					line=1,cex=1.2)
+			}
 		}
 		invisible(list(Cases=Cases,Deaths=Deaths))
 	}
