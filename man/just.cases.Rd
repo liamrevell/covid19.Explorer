@@ -10,6 +10,7 @@ just.cases(states="Massachusetts",
 	xlim=c(60,366+365),
 	per.capita=FALSE,
 	cols=NULL,
+	show=c("both","cases","deaths"),
 	...)
 }
 \arguments{
@@ -21,6 +22,7 @@ just.cases(states="Massachusetts",
 	\item{xlim}{\emph{x}-limits for the plot.}
 	\item{per.capita}{show per 1M population (logical).}
 	\item{cols}{colors for plotting.}
+	\item{show}{what to show in plot.}
 	\item{...}{optional arguments.}
 }
 \description{
