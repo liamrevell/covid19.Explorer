@@ -9,7 +9,7 @@ just.cases<-function(states="Massachusetts",
 	show=c("both","cases","deaths"),
 	...){
 	show<-show[1]
-	POST<-if(window>1) paste(" (",window,"day moving average)",sep="") else ""
+	POST<-if(window>1) paste(" (",window,"-day moving average)",sep="") else ""
 	if(length(states)>0){
 		ss<-states
 		if(cumulative) window<-1
@@ -95,11 +95,11 @@ just.cases<-function(states="Massachusetts",
 				bty="n",cex=0.9,xpd=TRUE,xjust=0.5,yjust=1)
 			if(cumulative){
 				PRE<-if(show=="both") "a) c" else "C"
-				mtext(paste(PRE,"cumulative confirmed SARS-CoV-2 infections",denom,sep=""),
+				mtext(paste(PRE,"umulative confirmed SARS-CoV-2 infections",denom,sep=""),
 					adj=0,line=1,cex=1.2)
 			} else {
 				PRE<-if(show=="both") "a) d" else "D"
-				mtext(paste(PRE,"daily confirmed SARS-CoV-2 infections",denom,POST,sep=""),
+				mtext(paste(PRE,"aily confirmed SARS-CoV-2 infections",denom,POST,sep=""),
 					adj=0,line=1,cex=1.2)
 			}
 		}
@@ -128,11 +128,11 @@ just.cases<-function(states="Massachusetts",
 				bty="n",cex=0.9,xpd=TRUE,xjust=0.5,yjust=1)
 			if(cumulative){
 				PRE<-if(show=="both") "b) c" else "C"
-				mtext(paste(PRE,"cumulative COVID-19 deaths",denom,sep=""),adj=0,
+				mtext(paste(PRE,"umulative COVID-19 deaths",denom,sep=""),adj=0,
 					line=1,cex=1.2)
 			} else {
-				PRE<-if(show=="both") "b) c" else "C"
-				mtext(paste(PRE,"daily confirmed COVID-19 deaths",denom,POST,sep=""),adj=0,
+				PRE<-if(show=="both") "b) d" else "D"
+				mtext(paste(PRE,"aily confirmed COVID-19 deaths",denom,POST,sep=""),adj=0,
 					line=1,cex=1.2)
 			}
 		}
