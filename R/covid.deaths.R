@@ -46,8 +46,10 @@ covid.deaths<-function(
 		if(length(age.group)>0 && length(sex)>0){
 			DD<-CovidDeaths
 			dates<-as.Date(DD$End.Week,format="%m/%d/%Y")
-			ii<-which(dates>="2021-01-09")
+			ii<-intersect(which(dates>="2021-01-09"),which(dates<"2022-01-08")) ## &&dates<"2022-01-08"
+			jj<-which(dates>="2022-01-08")
 			DD$MMWR.Week[ii]<-DD$MMWR.Week[ii]+53
+			DD$MMWR.Week[jj]<-DD$MMWR.Week[jj]+53+52
 			ii<-which(IN(DD$Age.Group,age.group))
 			DD<-DD[ii,]
 			ii<-which(DD$Sex%in%sex)
@@ -120,8 +122,10 @@ covid.deaths<-function(
 				if(show%in%c("per.capita","percent")&&plot%in%c("bar","standard")) 
 					plot<-"smooth"
 			ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,
+				31,28,31,30,31,30,31,31,30,31,30,31,
 				31,28,31,30,31,30,31,31,30,31,30,31))
 			mm<-c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec",
+				"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec",
 				"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec",
 				"Jan")
 			xx<-seq(from=35.5,by=7,length.out=length(td))
