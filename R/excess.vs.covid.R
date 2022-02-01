@@ -31,7 +31,8 @@ excess.vs.covid<-function(
 		all.weekly<-rowSums(all.covid)
 		all.excess<-age.deaths(data=data,state="United States",return="Excess",
 			regression=TRUE,plot=FALSE,age.group=age.group)
-		excess<-c(all.excess[6:52,"2020"],all.excess[1:52,"2021"])
+		excess<-c(all.excess[6:52,"2020"],all.excess[1:52,"2021"],
+			all.excess[1:52,"2022"])
 		nn<-min(sum(!is.na(excess)),length(all.weekly))
 		excess<-excess[1:nn]
 		all.weekly<-all.weekly[1:nn]
