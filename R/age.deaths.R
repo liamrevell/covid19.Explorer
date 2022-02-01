@@ -1,11 +1,11 @@
 regressExcess<-function(Deaths,return=c("Excess","Expected")){	
 	return<-return[1]
-	Expected<-matrix(NA,52,7,dimnames=list(1:52,2015:2021))
+	Expected<-matrix(NA,52,8,dimnames=list(1:52,2015:2022))
 	for(i in 1:nrow(Deaths)){
 		x<-2015:2019
 		y<-Deaths[i,1:5]
 		fit<-lm(y~x)
-		newdata<-data.frame(x=2015:2021)
+		newdata<-data.frame(x=2015:2022)
 		Expected[i,]<-predict(fit,newdata=newdata)
 	}
 	Excess<-Deaths-Expected
@@ -24,9 +24,10 @@ age.deaths<-function(
 	data=list(),
 	date.range=list(),
 	return=NULL,
-	year=2020,
+	year=c(2020,2021,2022),
 	bg="transparent",
 	...){
+	year<-year[1]
 	plot<-plot[1]
 	if(plot==FALSE) PLOT<-FALSE
 	else PLOT<-TRUE
@@ -61,11 +62,14 @@ age.deaths<-function(
 		jj<-which(Counts$Year==year)
 		start.day<-as.numeric(start.date-as.Date("01/01/2020",format="%m/%d/%Y"))
 		end.day<-as.numeric(end.date-as.Date("01/01/2020",format="%m/%d/%Y"))
-		US.popn<-setNames(c(colSums(States),331002651+States["Puerto Rico",5],
-			332722610+States["Puerto Rico",5]),2015:2021)
+		US.popn<-setNames(c(colSums(States), 331501080+States["Puerto Rico",5],
+			331893745+States["Puerto Rico",5], 
+			332466792+States["Puerto Rico",5]),
+			2015:2022)
 		States<-cbind(States,States[,5]/sum(States[,5])*US.popn[6])
 		States<-cbind(States,States[,5]/sum(States[,5])*US.popn[7])
-		colnames(States)<-2015:2021
+		States<-cbind(States,States[,5]/sum(States[,5])*US.popn[8])
+		colnames(States)<-2015:2022
 		nyc<-8336817
 		nyc<-nyc*States["New York",]/States["New York",5]
 		States["New York",]<-as.vector(States["New York",])-nyc
@@ -73,12 +77,13 @@ age.deaths<-function(
 		rownames(States)[nrow(States)]<-"New York City"
 		States<-rbind(States,colSums(States))
 		rownames(States)[nrow(States)]<-"United States"
-		Deaths<-matrix(0,53,7,dimnames=list(1:53,2015:2021))
+		Deaths<-matrix(0,53,8,dimnames=list(1:53,2015:2022))
 		ii<-which(Counts$Type=="Predicted (weighted)")
 		Counts<-Counts[ii,]
-		nn<-max(Counts[which(Counts$Year==2021),]$Week)
+		mm<-max(Counts[which(Counts$Year==2021),]$Week)
+		nn<-max(Counts[which(Counts$Year==2022),]$Week)
 		ii<-which(Counts[,1]==state)
-		for(i in 1:7){
+		for(i in 1:8){
 			jj<-which(Counts$Year==2014+i)
 			for(j in 1:length(age.group)){
 				kk<-intersect(intersect(ii,jj),
@@ -88,11 +93,14 @@ age.deaths<-function(
 					Counts[kk,"Number.of.Deaths"]
 			}
 		}
-		if(nn<52) Deaths[(nn+1):52,i]<-NA
+		if(mm<52) Deaths[(mm+1):52,7]<-NA
+		if(nn<52) Deaths[(nn+1):52,8]<-NA
 		## fix problem with 53 end of weeks in 2020
-		Deaths[,7]<-c(Deaths[53,6],Deaths[1:52,7])
+		dd.2021<-c(Deaths[53,6],Deaths[1:51,7])
+		dd.2022<-c(Deaths[52,7],Deaths[1:51,8])
+		Deaths[1:52,c(7,8)]<-cbind(dd.2021,dd.2022)
 		Deaths<-Deaths[1:52,]
-		if(nn>52){ 
+		if(mm>52){ 
 			Deaths<-Deaths[1:52,]
 			nn<-52
 		}
@@ -105,28 +113,34 @@ age.deaths<-function(
 		}
 		if(corrected){
 			Deaths2020<-Deaths*matrix(as.numeric(States[state,6])/
-				as.numeric(States[state,1:7]),52,7,byrow=TRUE)
+				as.numeric(States[state,1:8]),52,8,byrow=TRUE)
 			Deaths2021<-Deaths*matrix(as.numeric(States[state,7])/
-				as.numeric(States[state,1:7]),52,7,byrow=TRUE)
-		} else Deaths2020<-Deaths2021<-Deaths
+				as.numeric(States[state,1:8]),52,8,byrow=TRUE)
+			Deaths2022<-Deaths*matrix(as.numeric(States[state,8])/
+				as.numeric(States[state,1:8]),52,8,byrow=TRUE)
+		} else Deaths2020<-Deaths2021<-Deaths2022<-Deaths
 		if(regression){
-			Normal2020<-Normal2021<-regressExcess(Deaths,return="Expected")
+			Normal2020<-Normal2021<-Normal2022<-
+				regressExcess(Deaths,return="Expected")
 		} else {
 			Normal2020<-rowMeans(Deaths2020[,1:5])
 			Normal2021<-rowMeans(Deaths2021[,1:5])
+			Normal2022<-rowMeans(Deaths2022[,1:5])
 		}
 		if(regression)
 			Excess<-regressExcess(Deaths)
 		else 
 			Excess<-cbind(Deaths2020[,1:6]-matrix(Normal2020,52,6),
-				(Deaths2021[,1:7]-matrix(Normal2021,52,7))[,7])
+				(Deaths2021[,1:7]-matrix(Normal2021,52,7))[,7],
+				(Deaths2022[,1:8]-matrix(Normal2022,52,8))[,8])
 		colnames(Excess)[7]<-"2021"
+		colnames(Excess)[8]<-"2022"
 		if(regression){
 			PercentAbove<-Excess/Normal2020*100
 			cumPercentAbove<-apply(Excess,2,cumsum)/apply(Normal2020,2,cumsum)*100
 		} else {
-			PercentAbove<-Excess/matrix(Normal2020,52,7)*100
-			cumPercentAbove<-apply(Excess,2,cumsum)/matrix(cumsum(Normal2020),52,7)*100
+			PercentAbove<-Excess/matrix(Normal2020,52,8)*100
+			cumPercentAbove<-apply(Excess,2,cumsum)/matrix(cumsum(Normal2020),52,8)*100
 		}	
 		if(year==2020){
 			ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31))
@@ -138,9 +152,14 @@ age.deaths<-function(
 			mm<-c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug",
 				"Sep","Oct","Nov","Dec","Jan '22")
 			days<-seq(2,by=7,to=max(ms))
+		} else if(year==2022){
+			ms<-cumsum(c(0,31,28,31,30,31,30,31,31,30,31,30,31))
+			mm<-c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug",
+				"Sep","Oct","Nov","Dec","Jan '23")
+			days<-seq(2,by=7,to=max(ms))
 		}
 		## start plotting
-		if(year==2020) nn<-52
+		nn<-52-sum(is.na(Deaths[,as.character(year)])) 
 		if(PLOT){
 			par(mfrow=c(2,1),mar=c(5.1,5.1,3.1,2.1),bg=bg)
 			plot(NA,xlim=c(start.day,end.day),bty="n",
@@ -209,7 +228,7 @@ age.deaths<-function(
 					}
 					e2020<-cumExcess[,as.character(year)]
 					e2020<-e2020[!is.na(e2020)]
-					if(year==2020) ww<-0 else ww<-5
+					if(year==2020) ww<-0 else ww<-0
 					lines(days[1:(length(e2020)-ww)],
 						e2020[1:(length(e2020)-ww)],lwd=5,
 						col=rgb(1,1,1,1))
@@ -226,10 +245,9 @@ age.deaths<-function(
 					}
 					legend(if(year==2020) "topleft" else "topright",
 						c("cumulative excess deaths\n2015-2019",
-						paste("cumulative excess deaths",year),
-						"data incomplete"),
-						lwd=c(1,2,2),col=c("black",palette()[4],palette()[4]),
-						lty=c("solid","solid","dotted"),cex=0.7,
+						paste("cumulative excess deaths",year)),
+						lwd=c(1,2,2),col=c("black",palette()[4]),
+						lty=c("solid","solid"),cex=0.7,
 						bg=leg2.bg,box.col="transparent")
 					mtext(paste(
 						"b)",ss,"cumulative deaths above normal (or provisional)",qq),adj=0,line=1,cex=1.2)

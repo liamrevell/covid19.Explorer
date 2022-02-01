@@ -12,7 +12,7 @@
 		data=list(),
 		date.range=list(),
 		return=NULL,
-		year=2020,
+		year=c(2020,2021,2022),
 		bg="transparent",
 		...)
 }
