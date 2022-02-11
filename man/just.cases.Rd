@@ -10,7 +10,8 @@ just.cases(states="Massachusetts",
 	xlim=c(60,366+365+31),
 	per.capita=FALSE,
 	cols=NULL,
-	show=c("both","cases","deaths"),
+	show=c("both","cases","deaths","neither"),
+	plot.bars=FALSE,
 	...)
 }
 \arguments{
@@ -23,6 +24,7 @@ just.cases(states="Massachusetts",
 	\item{per.capita}{show per 1M population (logical).}
 	\item{cols}{colors for plotting.}
 	\item{show}{what to show in plot.}
+	\item{plot.bars}{logical indicating whether to plot bars.}
 	\item{...}{optional arguments.}
 }
 \description{
