@@ -12,13 +12,13 @@ just.cases<-function(states="Massachusetts",
 	show<-show[1]
 	if(length(states)>1) plot.bars=FALSE
 	if(plot.bars){
-		obj<-just.cases(states,cumulative,data,window=1,per.capita,show="neither",
+		obj<-just.cases(states,cumulative,data,window=1,per.capita=per.capita,show="neither",
 			plot.bars=FALSE)
 		CASES<-obj$Cases[[1]]
 		DEATHS<-obj$Deaths[[1]]
 	}
 	POST<-if(window>1&&!plot.bars) paste(" (",window,"-day moving average)",sep="") else ""
-	leg.POST<-if(plot.bars) paste(" (",window,"-day moving average)",sep="") else ""
+	leg.POST<-if(plot.bars&&!cumulative) paste(" (",window,"-day moving average)",sep="") else ""
 	if(length(states)>0){
 		ss<-states
 		if(cumulative) window<-1
