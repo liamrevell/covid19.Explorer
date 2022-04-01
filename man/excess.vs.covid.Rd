@@ -12,7 +12,7 @@
 	"85 years and older"),
 	cumulative=FALSE,
 	data=list(),
-	xlim=c(60,366+365+59),
+	xlim=c(60,366+365+90),
 	bg="transparent",
 	lwd=2,
 	...)
