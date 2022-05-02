@@ -8,7 +8,7 @@ excess.vs.covid<-function(
 	"85 years and older"),
 	cumulative=FALSE,
 	data=list(),
-	xlim=c(60,366+365+90),
+	xlim=c(60,366+365+120),
 	bg="transparent",
 	lwd=2,
 	...){
