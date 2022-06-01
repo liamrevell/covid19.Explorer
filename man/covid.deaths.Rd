@@ -19,7 +19,7 @@
 		all.causes=TRUE,
 		cumulative=FALSE,
 		data=list(),
-		xlim=c(60,366+365+120),
+		xlim=c(60,366+365+151),
 		bg="transparent",
 		plot=c("standard","smooth","bar"),
 		show=c("raw","per.capita","percent","percent.of.covid.deaths"),
