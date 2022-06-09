@@ -73,10 +73,10 @@ just.cases<-function(states="Massachusetts",
 		ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,
 			31,28,31,30,31,30,31,31,30,31,30,31,
 			31,28,31,30,31,30,31,31,30,31,30,31))
-		mm<-c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec",
-			"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec",
-			"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec",
-			"Jan")
+		mm<-c("Jan '20","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec",
+			"Jan '21","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec",
+			"Jan '22","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec",
+			"Jan '23")
 		mfrow<-if(show=="both") c(2,1) else c(1,1)
 		if(show!="neither"){
 			par(mfrow=mfrow,mar=c(5.1,5.1,3.1,3.1),bg=bg)
@@ -109,6 +109,7 @@ just.cases<-function(states="Massachusetts",
 				Args$at<-h
 				Args$labels<-relabel.axis(h)
 				abline(h=h,col=grey(0.75),lwd=1,lty="dotted")
+				if(is.null(Args$las)) Args$las<-2
 				do.call(axis,Args)
 				nulo<-mapply(lines,Cases,col=cols,MoreArgs=list(lwd=2))
 				legend(x="topleft",paste(states,leg.POST),
@@ -152,6 +153,7 @@ just.cases<-function(states="Massachusetts",
 				Args$at<-h
 				Args$labels<-relabel.axis(h)
 				abline(h=h,col=grey(0.75),lwd=1,lty="dotted")
+				if(is.null(Args$las)) Args$las<-2
 				do.call(axis,Args)
 				nulo<-mapply(lines,Deaths,col=cols,MoreArgs=list(lwd=2))
 				legend(x="topleft",paste(states,leg.POST),

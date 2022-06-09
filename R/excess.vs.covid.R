@@ -46,10 +46,10 @@ excess.vs.covid<-function(
 		ms<-cumsum(c(0,31,29,31,30,31,30,31,31,30,31,30,31,
 			31,28,31,30,31,30,31,31,30,31,30,31,
 			31,28,31,30,31,30,31,31,30,31,30,31))
-		mm<-c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec",
-			"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec",
-			"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec",
-			"Jan")
+		mm<-c("Jan '20","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec",
+			"Jan '21","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec",
+			"Jan '22","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec",
+			"Jan '23")
 		xx<-seq(from=35.5,by=7,length.out=length(excess.cumsum))
 		plot(xx,excess,type="l",bty="n",axes=FALSE,xlab="",ylab="",
 			lwd=lwd,col=palette()[2],ylim=c(0,1.2*max(c(excess,all.weekly))),
