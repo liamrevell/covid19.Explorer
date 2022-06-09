@@ -73,7 +73,7 @@ excess.vs.covid<-function(
 		if(cumulative)
 			legend("topleft",c("cumulative excess deaths 2020/21",
 				"cumulative confirmed COVID-19 deaths",pp),
-				lwd=c(2,2,NA),col=c(palette()[c(2,7)],NA),bty="n",
+				lwd=c(lwd,lwd,NA),col=c(palette()[c(2,7)],NA),bty="n",
 				cex=0.8)
 		else
 			legend("topleft",c("weekly excess deaths 2020/21",
