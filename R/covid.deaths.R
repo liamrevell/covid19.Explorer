@@ -23,7 +23,7 @@ covid.deaths<-function(
 	all.causes=TRUE,
 	cumulative=FALSE,
 	data=list(),
-	xlim=c(60,366+365+181),
+	xlim=c(60,366+365+365),
 	bg="transparent",
 	plot=c("standard","smooth","bar"),
 	show=c("raw","per.capita","percent","percent.of.covid.deaths"),
@@ -47,7 +47,7 @@ covid.deaths<-function(
 			DD<-CovidDeaths
 			dates<-as.Date(DD$End.Week,format="%m/%d/%Y")
 			ii<-intersect(which(dates>="2021-01-09"),which(dates<"2022-01-08")) ## &&dates<"2022-01-08"
-			jj<-which(dates>="2022-01-08")
+			jj<-intersect(which(dates>="2022-01-08"),which(dates<"2023-01-07"))
 			DD$MMWR.Week[ii]<-DD$MMWR.Week[ii]+53
 			DD$MMWR.Week[jj]<-DD$MMWR.Week[jj]+53+52
 			ii<-which(IN(DD$Age.Group,age.group))
