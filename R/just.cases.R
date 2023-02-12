@@ -3,7 +3,7 @@ just.cases<-function(states="Massachusetts",
 	data=list(),
 	window=7,
 	bg="transparent",
-	xlim=c(60,366+365+181),
+	xlim=c(60,366+365+365),
 	per.capita=FALSE,
 	cols=NULL,
 	show=c("both","cases","deaths","neither"),
@@ -123,6 +123,10 @@ just.cases<-function(states="Massachusetts",
 					mtext(paste(PRE,"aily confirmed SARS-CoV-2 infections",denom,POST,sep=""),
 						adj=0,line=1,cex=1.2)
 				}
+				if(xlim[2]>(366+365+365-120))
+					legend("topright",
+						legend="from Oct. 20, '22\nthe U.S. CDC\nno longer reports\ndaily COVID-19\ncases or deaths.",
+						bty="n",cex=0.7)
 			}
 			if(show%in%c("both","deaths")){
 				plot(NA,xlim=xlim,ylim=1.25*c(0,maxDeaths),bty="n",ylab="",xlab="",
@@ -167,6 +171,10 @@ just.cases<-function(states="Massachusetts",
 					mtext(paste(PRE,"aily confirmed COVID-19 deaths",denom,POST,sep=""),adj=0,
 						line=1,cex=1.2)
 				}
+				if(xlim[2]>(366+365+365-120))
+					legend("topright",
+						legend="from Oct. 20, '22\nthe U.S. CDC\nno longer reports\ndaily COVID-19\ncases or deaths.",
+						bty="n",cex=0.7)
 			}
 		}
 		invisible(list(Cases=Cases,Deaths=Deaths))
